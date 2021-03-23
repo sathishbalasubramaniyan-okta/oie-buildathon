@@ -32,12 +32,10 @@
             authParams : {                  
               issuer: 'https://sathishb.okta.com/oauth2/default',
               pkce: false;
-              responseType : 'code',
+              responseType: ['id_token', 'token'],
               // `display: page` will initiate the OAuth2 page redirect flow
-              display : 'page',
-              scopes : [  'openid','email','profile','address','phone', 'offline_access' ]
-            },
-            authScheme : 'OAUTH2',                
+              scopes : [  'openid','email','profile','address','phone']
+            },              
             features : {
               registration : true,
               rememberMe : true,
@@ -45,40 +43,17 @@
               multiOptionalFactorEnroll : true,
               selfServiceUnlock : true,
               autoPush : true,
-              idpDiscovery: false,
-              passwordlessAuth: true
+              idpDiscovery: false
             }
           });
 
           // The user has just landed on our login form, and has not yet authenticated
-          if (!signIn.hasTokensInUrl()) {
-            console.log('User is yet to authenticate');
-            signIn.renderEl({
-              el : '#okta-login-container'
-            },
-            function(res) {
-              if (res.status === 'SUCCESS') {
-                console.log('Authentication success');
-                res.session.setCookieAndRedirect(orgUrl);
-              }
-              if (res.status !== 'SUCCESS') { 
-                console.log('Authentication fail');
-                return;
-              }
-            });
-          }
-          // The user has redirected back after authenticating and has their access or ID Token in the URL.
-          else {
-            console.log('User has already authenticated');
-            signIn.parseTokensFromUrl(function success(res) {
-              console.log('Authentication success');
-              signIn.tokenManager.add('my_access_token',res);
-            },
-            function error(err) {
-              console.log('Authentication fail');
-              handleError(err);
-            });
-          }
+          signIn.showSignInToGetTokens().then(function(tokens) {
+            oktaSignIn.authClient.tokenManager.setTokens(tokens);
+          }).catch(function(error) {
+            // This function is invoked with errors the widget cannot recover from:
+            // Known errors: CONFIG_ERROR, UNSUPPORTED_BROWSER_ERROR
+          });
       </script>
   </body>
 </html>
