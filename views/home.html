@@ -53,6 +53,7 @@
               signIn.authClient.token.getUserInfo()
               .then(function(user) {
                 document.getElementById("greeting").innerHTML = 'Welcome ' + user.given_name + '!';
+                document.getElementById("logout").style.display = 'block';
               })
               .catch(function(err) {
                 // handle OAuthError or AuthSdkError (AuthSdkError will be thrown if app is in OAuthCallback state)
@@ -65,7 +66,7 @@
           function logout()
           {
               signIn.authClient.signOut({
-                postLogoutRedirectUri: `${window.location.origin}/logout/callback`
+                'postLogoutRedirectUri': window.location.protocol + '//' + window.location.hostname
               });
           }
       </script>
