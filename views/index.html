@@ -47,6 +47,7 @@
 
           // The user has just landed on our login form, and has not yet authenticated
           signIn.showSignInToGetTokens().then(function(tokens) {
+            alert("inside show sign in");
             signIn.authClient.tokenManager.setTokens(tokens);
             window.location.assign(window.location.protocol + '//' + window.location.hostname + '/home');
           }).catch(function(error) {
