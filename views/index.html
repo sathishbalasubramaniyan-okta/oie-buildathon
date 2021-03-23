@@ -18,8 +18,6 @@
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css">
 
-    <!-- import the webpage's client-side javascript file -->
-    <script src="/script.js" defer></script>
   </head>
   <body>
     <div id="okta-login-container"></div> 
@@ -31,7 +29,7 @@
             redirectUri : 'https://sathish-widget.glitch.me/callback',
             authParams : {                  
               issuer: 'https://sathishb.okta.com/oauth2/default',
-              pkce: false;
+              pkce: false,
               responseType: ['id_token', 'token'],
               // `display: page` will initiate the OAuth2 page redirect flow
               scopes : [  'openid','email','profile','address','phone']
@@ -49,7 +47,8 @@
 
           // The user has just landed on our login form, and has not yet authenticated
           signIn.showSignInToGetTokens().then(function(tokens) {
-            oktaSignIn.authClient.tokenManager.setTokens(tokens);
+            signIn.authClient.tokenManager.setTokens(tokens);
+            window.location.assign();
           }).catch(function(error) {
             // This function is invoked with errors the widget cannot recover from:
             // Known errors: CONFIG_ERROR, UNSUPPORTED_BROWSER_ERROR
