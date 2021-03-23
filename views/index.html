@@ -11,6 +11,10 @@
     <title>Test Okta Signin Widget</title>
 
     <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    
+    <script src="https://global.oktacdn.com/okta-signin-widget/5.4.0/js/okta-sign-in.min.js" type="text/javascript"></script>
+
+    <link href="https://global.oktacdn.com/okta-signin-widget/5.4.0/css/okta-sign-in.min.css" type="text/css" rel="stylesheet"/>
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css">
 
@@ -18,35 +22,66 @@
     <script src="/script.js" defer></script>
   </head>
   <body>
-    <header>
-      <h1>A Dream of the Future</h1>
-    </header>
+    <div id="okta-login-container"></div> 
+        <script type="text/javascript">
+          var signIn = new OktaSignIn({
+            el: '#okta-login-container',
+            baseUrl : 'https://sathishb.okta.com',
+            clientId : '0oaafj1e3jBIA1FSE2p7',
+            redirectUri : pageContext + '/<%=projectName%>/initialize.html',
+            tokenManager: {
+              storage: 'sessionStorage'
+            },
+            authParams : {                  
+              issuer: orgUrl + '/oauth2/<%=serverId%>',
+              authorizeUrl: orgUrl + '/oauth2/<%=serverId%>/v1/authorize',
+              responseType : 'code',
+              // `display: page` will initiate the OAuth2 page redirect flow
+              display : 'page',
+              scopes : [  'openid','email','profile','address','phone', 'offline_access' ]
+            },
+            authScheme : 'OAUTH2',                
+            features : {
+              registration : true,
+              rememberMe : true,
+              smsRecovery : true,
+              multiOptionalFactorEnroll : true,
+              selfServiceUnlock : true,
+              autoPush : true,
+              idpDiscovery: false,
+              passwordlessAuth: true
+            }
+          });
 
-    <main>
-      <h2>Oh hi,</h2>
-
-      <p>Tell me your hopes and dreams:</p>
-
-      <form>
-        <label>
-          New Dream
-          <input name="dream" type="text" maxlength="100" required placeholder="Dreams!">
-        </label>
-        <button type="submit" id="submit-dream">Add Dream</button>
-      </form>
-
-      <section class="dreams">
-        <ul id="dreams">
-          <em>loading dreams&hellip;</em>
-        </ul>
-      </section>
-    </main>
-
-    <footer>Made with <a href="https://glitch.com">Glitch</a>!</footer>
-
-    <!-- include the Glitch button to show what the webpage is about and
-          to make it easier for folks to view source and remix -->
-    <div class="glitchButton" style="position:fixed;top:2em;right:20px;"></div>
-    <script src="https://button.glitch.me/button.js" defer></script>
+          // The user has just landed on our login form, and has not yet authenticated
+          if (!signIn.hasTokensInUrl()) {
+            console.log('User is yet to authenticate');
+            signIn.renderEl({
+              el : '#okta-login-container'
+            },
+            function(res) {
+              if (res.status === 'SUCCESS') {
+                console.log('Authentication success');
+                res.session.setCookieAndRedirect(orgUrl);
+              }
+              if (res.status !== 'SUCCESS') { 
+                console.log('Authentication fail');
+                return;
+              }
+            });
+          }
+          // The user has redirected back after authenticating and has their access or ID Token in the URL.
+          else {
+            console.log('User has already authenticated');
+            signIn.parseTokensFromUrl(function success(res) {
+              console.log('Authentication success');
+              signIn.tokenManager.add('my_access_token',res);
+            },
+            function error(err) {
+              console.log('Authentication fail');
+              handleError(err);
+            });
+          }
+      </script>
   </body>
 </html>
