@@ -20,6 +20,9 @@
   <body>
     <div id="greeting"></div> 
     <div id="okta-login-container"></div> 
+    <div id="logout">
+      <a href="javascript:;" onclick="logout();">Logout</a>
+    </div>
     <script type="text/javascript">
           var signIn = new OktaSignIn({
             el: '#okta-login-container',
@@ -49,15 +52,22 @@
             if (exists) {
               signIn.authClient.token.getUserInfo()
               .then(function(user) {
-                // user has details about the user
+                document.getElementById("greeting").innerHTML = 'Welcome ' + user.given_name + '!';
               })
               .catch(function(err) {
                 // handle OAuthError or AuthSdkError (AuthSdkError will be thrown if app is in OAuthCallback state)
               });
             } else {
-              
+              window.location.assign(window.location.protocol + '//' + window.location.hostname);
             }
           });
+      
+          function logout()
+          {
+              signIn.authClient.signOut({
+                postLogoutRedirectUri: `${window.location.origin}/logout/callback`
+              });
+          }
       </script>
   </body>
 </html>
