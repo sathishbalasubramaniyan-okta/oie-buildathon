@@ -17,15 +17,17 @@
     <link href="https://global.oktacdn.com/okta-signin-widget/4.1.1/css/okta-sign-in.min.css" type="text/css" rel="stylesheet"/>
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
     <div id="greeting"></div>
     <div id="logout" style="display:none">
       <a href="javascript:;" onclick="logout();">Logout</a>
     </div>
-    <div id="api">
-      
+    <div id="api" style="display:none">
+      <button onclick="callApi()">Call API</button>
+      <textarea id="apiresponse" name="apiresponse" rows="4" cols="50">
+      </textarea>
     </div>
     <div id="okta-login-container"></div> 
         <script type="text/javascript">
@@ -63,6 +65,7 @@
                   document.getElementById("greeting").style.display = 'block';
                   document.getElementById("greeting").innerHTML = 'Welcome ' + user.given_name + '!';
                   document.getElementById("logout").style.display = 'block';
+                  document.getElementById("api").style.display = 'block';
                 })
                 .catch(function(err) {
                   // handle OAuthError or AuthSdkError (AuthSdkError will be thrown if app is in OAuthCallback state)
@@ -83,6 +86,30 @@
           function logout()
           {
               signIn.authClient.signOut();
+          }
+          
+          function callApi()
+          {
+              const accessToken = signIn.authClient.getAccessToken();
+              if (!accessToken) {
+                // This means that the user is not logged in
+                return;
+              }
+              // Make a request using jQuery
+              $.ajax({
+                // Your API or resource server:
+                url: window.location.protocol + '//' + window.location.hostname + '/api',
+                headers: {
+                  Authorization: 'Bearer ' + accessToken.accessToken
+                },
+                success: function(response) {
+                  // Received messages!
+                  document.getElementById("apiresponse").innerHTML = response;
+                },
+                error: function(response) {
+                  document.getElementById("apiresponse").innerHTML = response;
+                }
+              });
           }
       </script>
   </body>
