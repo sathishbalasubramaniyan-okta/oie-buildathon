@@ -49,9 +49,10 @@
             }
           });
 
-          
-            if (signIn.authClient.tx.exists()) {
-              alert('Session exists');
+          signIn.authClient.session.exists()
+          .then(function(exists) {
+            if (exists) {
+              //alert('Session exists');
               if (signIn.hasTokensInUrl()) {
                 signIn.authClient.token.parseFromUrl()
                 .then(function(res) {
@@ -78,10 +79,10 @@
                 });
               }
             } else {
-              alert('Session does not exist');
+              //alert('Session does not exist');
               signIn.renderEl({el: '#okta-login-container'});
             }
-          
+          });
           
           function logout()
           {
