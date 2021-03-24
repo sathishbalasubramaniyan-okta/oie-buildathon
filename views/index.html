@@ -33,9 +33,9 @@
             redirectUri : 'https://sathish-widget.glitch.me',
             authParams : {                  
               issuer: 'https://sathishb.okta.com/oauth2/default',
-              pkce: false,
+              pkce: true,
               display: 'page',
-              responseType: ['id_token', 'token'],
+              //responseType: ['id_token', 'token'],
               // `display: page` will initiate the OAuth2 page redirect flow
               scopes : [  'openid','email','profile','address','phone', 'offline_access']
             },              
