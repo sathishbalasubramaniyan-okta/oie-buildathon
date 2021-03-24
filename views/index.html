@@ -52,22 +52,24 @@
           signIn.authClient.session.exists()
           .then(function(exists) {
             if (exists) {
-              //alert('Session exists');
+              alert('Session exists');
               if (signIn.hasTokensInUrl()) {
                 signIn.authClient.token.parseFromUrl()
                 .then(function(res) {
-                  // manage token or tokens
-                  var tokens = res.tokens;
-                  // Do something with tokens, such as
-                  signIn.authClient.tokenManager.setTokens(tokens);
+                  alert('Code/Tokens found');
+                  signIn.authClient.tokenManager.add('idToken', res.tokens.idToken);
+                  signIn.authClient.tokenManager.add('accessToken', res.tokens.accessToken);
+                  alert('Reloading page');
                   window.location.assign(window.location.protocol + '//' + window.location.hostname);
                 })
                 .catch(function(err) {
                   // handle OAuthError
                 });
               } else {
+                alert('Session exists but no code/tokens found');
                 signIn.authClient.token.getUserInfo()
                 .then(function(user) {
+                  alert('In get User');
                   document.getElementById("greeting").style.display = 'block';
                   document.getElementById("greeting").innerHTML = 'Welcome ' + user.given_name + '!';
                   document.getElementById("logout").style.display = 'block';
@@ -77,6 +79,7 @@
                 });
               }
             } else {
+              alert('Session does not exist');
               signIn.renderEl({el: '#okta-login-container'});
             }
           });
