@@ -20,6 +20,10 @@
 
   </head>
   <body>
+    <div id="greeting"></div>
+    <div id="logout">
+      <a href="javascript:;" onclick="logout();">Logout</a>
+    </div>
     <div id="okta-login-container"></div> 
         <script type="text/javascript">
           var signIn = new OktaSignIn({
@@ -53,6 +57,13 @@
             // This function is invoked with errors the widget cannot recover from:
             // Known errors: CONFIG_ERROR, UNSUPPORTED_BROWSER_ERROR
           });
+          
+          function logout()
+          {
+              signIn.authClient.signOut({
+                'postLogoutRedirectUri': window.location.protocol + '//' + window.location.hostname
+              });
+          }
       </script>
   </body>
 </html>

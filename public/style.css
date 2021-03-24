@@ -58,3 +58,7 @@ footer {
 #logout {
   display: none;
 }
+
+#greeting {
+  display: none;
+}
