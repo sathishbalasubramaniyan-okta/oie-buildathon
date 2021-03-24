@@ -30,12 +30,12 @@
             el: '#okta-login-container',
             baseUrl : 'https://sathishb.okta.com',
             clientId : '0oaafj1e3jBIA1FSE2p7',
-            redirectUri : 'https://sathish-widget.glitch.me',
+            redirectUri : 'https://sathish-widget.glitch.me/callback',
             authParams : {                  
               issuer: 'https://sathishb.okta.com/oauth2/default',
-              pkce: true,
+              pkce: false,
               display: 'page',
-              //responseType: ['id_token', 'token'],
+              responseType: ['id_token', 'token'],
               // `display: page` will initiate the OAuth2 page redirect flow
               scopes : [  'openid','email','profile','address','phone', 'offline_access']
             },              
