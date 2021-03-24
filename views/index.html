@@ -104,10 +104,10 @@
                 },
                 success: function(response) {
                   // Received messages!
-                  document.getElementById("apiresponse").innerHTML = response;
+                  document.getElementById("apiresponse").innerHTML = response.status;
                 },
                 error: function(response) {
-                  document.getElementById("apiresponse").innerHTML = response;
+                  document.getElementById("apiresponse").innerHTML = response.status;
                 }
               });
           }
