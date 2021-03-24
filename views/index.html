@@ -49,27 +49,26 @@
             }
           });
 
-          signIn.authClient.session.exists()
-          .then(function(exists) {
-            if (exists) {
+          
+            if (signIn.authClient.tx.exists()) {
               alert('Session exists');
               if (signIn.hasTokensInUrl()) {
                 signIn.authClient.token.parseFromUrl()
                 .then(function(res) {
-                  alert('Code/Tokens found');
+                  //alert('Code/Tokens found');
                   signIn.authClient.tokenManager.add('idToken', res.tokens.idToken);
                   signIn.authClient.tokenManager.add('accessToken', res.tokens.accessToken);
-                  alert('Reloading page');
+                  //alert('Reloading page');
                   window.location.assign(window.location.protocol + '//' + window.location.hostname);
                 })
                 .catch(function(err) {
                   // handle OAuthError
                 });
               } else {
-                alert('Session exists but no code/tokens found');
+                //alert('Session exists but no code/tokens found');
                 signIn.authClient.token.getUserInfo()
                 .then(function(user) {
-                  alert('In get User');
+                  //alert('In get User');
                   document.getElementById("greeting").style.display = 'block';
                   document.getElementById("greeting").innerHTML = 'Welcome ' + user.given_name + '!';
                   document.getElementById("logout").style.display = 'block';
@@ -82,7 +81,7 @@
               alert('Session does not exist');
               signIn.renderEl({el: '#okta-login-container'});
             }
-          });
+          
           
           function logout()
           {
