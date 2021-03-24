@@ -53,16 +53,30 @@
           signIn.authClient.session.exists()
           .then(function(exists) {
             if (exists) {
-              alert('Session exists');
-              signIn.authClient.token.getUserInfo()
-              .then(function(user) {
-                document.getElementById("greeting").style.display = 'block';
-                document.getElementById("greeting").innerHTML = 'Welcome ' + user.given_name + '!';
-                document.getElementById("logout").style.display = 'block';
-              })
-              .catch(function(err) {
-                // handle OAuthError or AuthSdkError (AuthSdkError will be thrown if app is in OAuthCallback state)
-              });
+              //alert('Session exists');
+              if (signIn.authClient.isLoginRedirect()) {
+                signIn.authClient.token.parseFromUrl()
+                .then(function(res) {
+                  // manage token or tokens
+                  var tokens = res.tokens;
+                  // Do something with tokens, such as
+                  signIn.authClient.tokenManager.setTokens(tokens);
+                  window.location.assign(window.location.protocol + '//' + window.location.hostname);
+                })
+                .catch(function(err) {
+                  // handle OAuthError
+                });
+              } else {
+                signIn.authClient.token.getUserInfo()
+                .then(function(user) {
+                  document.getElementById("greeting").style.display = 'block';
+                  document.getElementById("greeting").innerHTML = 'Welcome ' + user.given_name + '!';
+                  document.getElementById("logout").style.display = 'block';
+                })
+                .catch(function(err) {
+                  // handle OAuthError or AuthSdkError (AuthSdkError will be thrown if app is in OAuthCallback state)
+                });
+              }
             } else {
               signIn.showSignInAndRedirect().catch(function(error) {
                 // This function is invoked with errors the widget cannot recover from:
