@@ -34,6 +34,7 @@
             authParams : {                  
               issuer: 'https://sathishb.okta.com/oauth2/default',
               pkce: true,
+              display: 'page',
               //responseType: ['id_token', 'token'],
               // `display: page` will initiate the OAuth2 page redirect flow
               scopes : [  'openid','email','profile','address','phone', 'offline_access']
@@ -52,6 +53,7 @@
           signIn.authClient.session.exists()
           .then(function(exists) {
             if (exists) {
+              alert('Session exists');
               signIn.authClient.token.getUserInfo()
               .then(function(user) {
                 document.getElementById("greeting").style.display = 'block';
