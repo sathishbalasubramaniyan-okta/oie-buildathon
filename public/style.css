@@ -55,9 +55,6 @@ footer {
   border-top: 1px solid lightgrey;
 }
 
-#logout {
-  display: none;
-}
 
 #greeting {
   display: none;

@@ -21,7 +21,7 @@
   </head>
   <body>
     <div id="greeting"></div>
-    <div id="logout">
+    <div id="logout" style="display:none">
       <a href="javascript:;" onclick="logout();">Logout</a>
     </div>
     <div id="okta-login-container"></div> 
@@ -74,9 +74,7 @@
           
           function logout()
           {
-              signIn.authClient.signOut({
-                'postLogoutRedirectUri': window.location.protocol + '//' + window.location.hostname
-              });
+              signIn.authClient.signOut();
           }
       </script>
   </body>
