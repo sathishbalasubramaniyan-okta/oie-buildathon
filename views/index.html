@@ -32,7 +32,7 @@
             redirectUri : 'https://sathish-widget.glitch.me',
             authParams : {                  
               issuer: 'https://sathishb.okta.com/oauth2/default',
-              pkce: false,
+              pkce: true,
               //display: 'page',
               //responseType: 'code',
               responseType: ['id_token', 'token'],
@@ -68,9 +68,9 @@
                 //alert('Session exists but no code/tokens found');
                 signIn.renderEl({el: '#okta-login-container'},
                   function success(res) {
-                    alert("In Success");
-                    signIn.authClient.tokenManager.add('idToken', res[0]);
-                    signIn.authClient.tokenManager.add('accessToken', res[1]);
+                    //alert("In Success");
+                    signIn.authClient.tokenManager.add('idToken', res.tokens.idToken);
+                    signIn.authClient.tokenManager.add('accessToken', res.tokens.accessToken);
                     window.location.assign(window.location.protocol + '//' + window.location.hostname);
                 });
               }
