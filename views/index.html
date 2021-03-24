@@ -88,9 +88,9 @@
               signIn.authClient.signOut();
           }
           
-          function callApi()
+          async function callApi()
           {
-              const accessToken = signIn.authClient.getAccessToken();
+              const accessToken = await signIn.authClient.tokenManager.get('accessToken');
               if (!accessToken) {
                 // This means that the user is not logged in
                 return;
