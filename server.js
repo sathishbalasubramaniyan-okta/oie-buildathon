@@ -19,6 +19,11 @@ app.get("/home", (request, response) => {
   response.sendFile(__dirname + "/views/home.html");
 });
 
+app.get("/api", (request, response) => {
+  response.setHeader('Content-Type', 'application/json');
+  response.send(JSON.stringify({status:"success"}));
+});
+
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, () => {
