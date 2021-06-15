@@ -11,18 +11,11 @@ const OktaAuth = require('@okta/okta-auth-js').OktaAuth;
 var config = {
   // Required config
   issuer: 'https://{yourOktaDomain}/oauth2/default',
-
-  // Required for login flow using getWithRedirect()
   clientId: 'GHtf9iJdr60A9IYrR0jw',
   redirectUri: 'https://acme.com/oauth2/callback/home',
-
-  // Parse authorization code from hash fragment instead of search query
-  responseMode: 'fragment',
-
-  // Configure TokenManager to use sessionStorage instead of localStorage
-  tokenManager: {
-    storage: 'sessionStorage'
-  }
+  appBaseUrl: 'http://localhost:8080',
+  scopes: ['openid', 'profile', 'email'],
+  postLogoutRedirectUri: 'http://localhost:8080'
 };
 
 var authClient = new OktaAuth(config);
@@ -45,6 +38,14 @@ app.get("/", (request, response) => {
 app.post("/home", (request, response) => {
   console.log("Username is: " + request.body.username);
   console.log("Password is: " + request.body.password);
+  const authenticationOptions = {
+  request.body.username,
+  request.body.password
+};
+const authTransaction = await authClient.idx.authenticate(authenticationOptions);
+if (authTransaction.status === 'SUCCESS') {
+  // handle tokens with authTransaction.tokens
+}
   response.render('home.html', {"name": "Sathish"});
 });
 
