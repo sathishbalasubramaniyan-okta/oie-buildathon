@@ -12,6 +12,7 @@ var config = {
   // Required config
   issuer: 'https://{yourOktaDomain}/oauth2/default',
   clientId: 'GHtf9iJdr60A9IYrR0jw',
+  clientSecret:'abc',
   redirectUri: 'https://acme.com/oauth2/callback/home',
   appBaseUrl: 'http://localhost:8080',
   scopes: ['openid', 'profile', 'email'],
@@ -49,6 +50,7 @@ app.post("/home", async (request, response) => {
 const authTransaction = await authClient.idx.authenticate(authenticationOptions);
 if (authTransaction.status === 'SUCCESS') {
   // handle tokens with authTransaction.tokens
+  console.log('Authentication Success');
   authClient.tokenManager.setTokens(authTransaction.tokens);
   response.render('home.html', {"name": "Sathish"});
 }
