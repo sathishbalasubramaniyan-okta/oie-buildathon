@@ -35,18 +35,21 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + "/views/index.html");
 });
 
-app.post("/home", (request, response) => {
+app.post("/home", async (request, response) => {
   console.log("Username is: " + request.body.username);
   console.log("Password is: " + request.body.password);
+  var username = request.body.username;
+  var password = request.body.password;
   const authenticationOptions = {
-  request.body.username,
-  request.body.password
-};
+    username,
+    password
+  };
 const authTransaction = await authClient.idx.authenticate(authenticationOptions);
 if (authTransaction.status === 'SUCCESS') {
   // handle tokens with authTransaction.tokens
-}
+  authClient.tokenManager.setTokens(authTransaction.tokens);
   response.render('home.html', {"name": "Sathish"});
+}
 });
 
 app.post("/logout", (request, response) => {
