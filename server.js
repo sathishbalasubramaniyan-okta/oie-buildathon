@@ -6,6 +6,26 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const mustacheExpress = require('mustache-express');
+const OktaAuth = require('@okta/okta-auth-js').OktaAuth;
+
+var config = {
+  // Required config
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
+
+  // Required for login flow using getWithRedirect()
+  clientId: 'GHtf9iJdr60A9IYrR0jw',
+  redirectUri: 'https://acme.com/oauth2/callback/home',
+
+  // Parse authorization code from hash fragment instead of search query
+  responseMode: 'fragment',
+
+  // Configure TokenManager to use sessionStorage instead of localStorage
+  tokenManager: {
+    storage: 'sessionStorage'
+  }
+};
+
+var authClient = new OktaAuth(config);
 const app = express();
 
 // make all the files in 'public' available
