@@ -15,7 +15,9 @@ var config = {
   redirectUri: 'https://acme.com/oauth2/callback/home',
   appBaseUrl: 'http://localhost:8080',
   scopes: ['openid', 'profile', 'email'],
-  postLogoutRedirectUri: 'http://localhost:8080'
+  postLogoutRedirectUri: 'http://localhost:8080',
+  responseType: 'code',
+  pkce: false
 };
 
 var authClient = new OktaAuth(config);
