@@ -28,9 +28,6 @@ app.post("/login", (request, response) => {
   response.render('home.html', {"name": "John"});
 });
 
-app.get("/home", (request, response) => {
-  response.sendFile(__dirname + "/views/home.html");
-});
 
 app.get("/api", (request, response) => {
   response.setHeader('Content-Type', 'application/json');

@@ -15,16 +15,14 @@
 
   </head>
   <body>
-    <div id="greeting"></div> 
+    <div id="greeting">Hello {{ name }}, you have logged in!</div> 
     <div id="logout">
       <a href="javascript:;" onclick="logout();">Logout</a>
     </div>
     <script type="text/javascript">
           function logout()
           {
-              signIn.authClient.signOut({
-                'postLogoutRedirectUri': window.location.protocol + '//' + window.location.hostname
-              });
+              window.location.assign(window.location.protocol + '//' + window.location.hostname);
           }
       </script>
   </body>
