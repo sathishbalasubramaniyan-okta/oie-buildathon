@@ -16,13 +16,17 @@
   </head>
   <body>
     <div id="greeting">Hello {{ name }}, you have logged in!</div> 
-    <div id="logout">
-      <a href="javascript:;" onclick="logout();">Logout</a>
-    </div>
+
+    <a id="logout" href="javascript:;" onclick="logout();">Logout</a>
+
     <script type="text/javascript">
           function logout()
           {
-              window.location.assign(window.location.protocol + '//' + window.location.hostname);
+              var form = document.createElement("form");
+              form.method = "POST";
+              form.action = "/logout";   
+              document.body.appendChild(form);
+              form.submit();
           }
       </script>
   </body>

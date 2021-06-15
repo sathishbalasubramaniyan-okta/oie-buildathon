@@ -22,10 +22,14 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + "/views/index.html");
 });
 
-app.post("/login", (request, response) => {
+app.post("/home", (request, response) => {
   console.log("Username is: " + request.body.username);
   console.log("Password is: " + request.body.password);
   response.render('home.html', {"name": "Sathish"});
+});
+
+app.post("/logout", (request, response) => {
+  response.sendFile(__dirname + "/views/index.html");
 });
 
 
