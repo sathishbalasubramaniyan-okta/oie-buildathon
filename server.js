@@ -5,6 +5,7 @@
 // but feel free to use whatever libraries or frameworks you'd like through `package.json`.
 const express = require("express");
 const bodyParser = require('body-parser');
+const mustacheExpress = require('mustache-express');
 const app = express();
 
 // make all the files in 'public' available
@@ -12,13 +13,19 @@ const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.engine('html', mustacheExpress());
+app.set('view engine', 'html'); 
+app.set('views', __dirname + '/views'); 
+
 // https://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
   response.sendFile(__dirname + "/views/index.html");
 });
 
 app.post("/login", (request, response) => {
-  response.sendFile(__dirname + "/views/index.html");
+  console.log("Username is: " + request.body.username);
+  console.log("Password is: " + request.body.password);
+  response.render('home.html', {"name": "John"});
 });
 
 app.get("/home", (request, response) => {
