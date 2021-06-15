@@ -17,10 +17,8 @@
 
   </head>
   <body>
-      <div>
-        Sign into the OIE experience!
-      </div>
       <form action="/login" method="post">
+        <div id="signinlabel">Sign into the OIE experience!</div>
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" id="username" name="username">
@@ -29,7 +27,7 @@
           <label for="password">Password</label>
           <input type="text" id="password" name="password">
         </div>
-        <input type="submit" value="Submit">
+        <input id="submit" type="submit" value="Submit">
       </form> 
   </body>
 </html>

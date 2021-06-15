@@ -22,7 +22,7 @@ form {
   display: grid;
   grid-gap: 1em;
   padding: 30px;
-  max-width: 40ch;
+  max-width: 50ch;
   margin: 10% auto
 }
 
@@ -32,6 +32,7 @@ input {
   font-size: 16px;
   margin-bottom: 10px;
   padding: 5px;
+  width: 60%
 }
 
 #username {
@@ -75,4 +76,14 @@ footer {
 
 label {
   display: inline-block;
+}
+
+#signinlabel {
+  margin: 0 auto;
+  margin-bottom: 5%;
+}
+
+#submit {
+  cursor: pointer;
+  margin-left: 20%
 }
