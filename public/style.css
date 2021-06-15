@@ -50,7 +50,7 @@ input {
   font-size: 16px;
   margin-bottom: 10px;
   padding: 5px;
-  margin-left: 11%;
+  margin-left: 10.7%;
 }
 
 form button {
@@ -85,5 +85,6 @@ label {
 
 #submit {
   cursor: pointer;
-  margin-left: 20%
+  margin-left: 20%;
+  margin-top: 3%
 }
