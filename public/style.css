@@ -55,7 +55,6 @@ footer {
   border-top: 1px solid lightgrey;
 }
 
-
-#greeting {
-  display: none;
+label {
+  display: inline-block;
 }
