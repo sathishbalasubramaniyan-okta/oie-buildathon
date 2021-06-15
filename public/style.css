@@ -21,8 +21,9 @@ form {
   background-color: #eee;
   display: grid;
   grid-gap: 1em;
-  padding: 1em;
+  padding: 30px;
   max-width: 40ch;
+  margin: 10% auto
 }
 
 input {
@@ -31,6 +32,24 @@ input {
   font-size: 16px;
   margin-bottom: 10px;
   padding: 5px;
+}
+
+#username {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  padding: 5px;
+  margin-left: 10%;
+}
+
+#password {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  padding: 5px;
+  margin-left: 11%;
 }
 
 form button {
