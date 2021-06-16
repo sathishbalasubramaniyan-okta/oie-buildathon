@@ -126,6 +126,7 @@ app.post("/verifyotp", async (request, response) => {
     const name = authTransaction.tokens.idToken.claims.name;
     response.render('home.html', {"name": name});
   } else {
+    console.log("Incorrect OTP: " + otp);
     response.sendFile(__dirname + "/views/otp.html");
   }
 });

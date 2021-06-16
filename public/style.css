@@ -35,7 +35,7 @@ input {
   width: 60%
 }
 
-#username {
+#username, #otp {
   border: 1px solid silver;
   display: inline-block;
   font-size: 16px;
