@@ -88,14 +88,13 @@ app.post("/home", async (request, response) => {
           console.log("Options label: " + authTransaction.nextStep.options[i].label);
           console.log("Options value: " + authTransaction.nextStep.options[i].value);
         }
-        authClient.transactionManager.clear();
-        response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+        var authTransactionEmail = await authClient.idx.authenticate({ authenticator: 'email' });
+        response.sendFile(__dirname + "/views/otp.html");
       } else {
         authClient.transactionManager.clear();
         response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
       }
     }
-
     
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
