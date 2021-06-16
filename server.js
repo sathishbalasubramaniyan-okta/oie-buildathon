@@ -53,7 +53,7 @@ app.post("/home", async (request, response) => {
     const name = authTransaction.tokens.idToken.claims.name;
     response.render('home.html', {"name": name});
   } else if (authTransaction.status === IdxStatus.FAILURE) {
-    console.log("In IdxStatus Failed: ");
+    console.log("In IdxStatus Failure: ");
     if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
     }
@@ -71,11 +71,17 @@ app.post("/home", async (request, response) => {
     if (authTransaction.error) {
       console.log(Object.keys(authTransaction.error));
     }
-
+    response.redirect("https://oie-buildathon.glitch.me/");
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
     if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
+      if (authTransaction.nextStep.inputs) {
+        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
+          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
+          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
+        }
+      }
     }
     
     if (authTransaction.error) {
