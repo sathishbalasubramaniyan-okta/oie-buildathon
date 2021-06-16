@@ -10,13 +10,13 @@ const OktaAuth = require('@okta/okta-auth-js').OktaAuth;
 
 var config = {
   // Required config
-  issuer: 'https://{yourOktaDomain}/oauth2/default',
-  clientId: 'GHtf9iJdr60A9IYrR0jw',
-  clientSecret:'abc',
-  redirectUri: 'https://acme.com/oauth2/callback/home',
-  appBaseUrl: 'http://localhost:8080',
+  issuer: 'https://oie-9004654.oktapreview.com/oauth2/default',
+  clientId: '0oausgtcbUm0u8Z8b1d6',
+  clientSecret:'T6hW-amIlYH8v_rrzMLTn8B9RyFDv6PDgdyunFIv',
+  redirectUri: 'https://oie-buildathon.glitch.me/callback',
+  appBaseUrl: 'https://oie-buildathon.glitch.me',
   scopes: ['openid', 'profile', 'email'],
-  postLogoutRedirectUri: 'http://localhost:8080',
+  postLogoutRedirectUri: 'https://oie-buildathon.glitch.me',
   responseType: 'code',
   pkce: false
 };
@@ -56,8 +56,10 @@ if (authTransaction.status === 'SUCCESS') {
 }
 });
 
-app.post("/logout", (request, response) => {
-  response.sendFile(__dirname + "/views/index.html");
+app.post("/logout", async (request, response) => {
+  await authClient.revokeAccessToken();
+  const signoutRedirectUrl = authClient.getSignOutRedirectUrl();
+  response.redirect(signoutRedirectUrl);
 });
 
 
