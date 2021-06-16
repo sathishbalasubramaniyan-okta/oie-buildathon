@@ -39,9 +39,6 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + "/views/index.html");
 });
 
-app.get("/otp", (request, response) => {
-  response.sendFile(__dirname + "/views/otp.html");
-});
 
 app.post("/home", async (request, response) => {
   var username = request.body.username;
@@ -94,7 +91,7 @@ app.post("/home", async (request, response) => {
         }
         console.log('In select-authenticator-authenticate');
         var authTransactionEmail = await authClient.idx.authenticate({ authenticator: 'email' });
-        response.sendFile(__dirname + "/views/otp.html");
+        response.render('otp.html', {"otp_text": "Enter the OTP you received to authenticate"});
       } else {
         authClient.transactionManager.clear();
         response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
@@ -134,7 +131,7 @@ app.post("/verifyotp", async (request, response) => {
     response.render('home.html', {"name": name});
   } else {
     console.log("Incorrect OTP: " + otp);
-    response.redirect('/otp?error=invalid otp');
+    response.render('otp.html', {"otp_text": "You entered an incorrect OTP. Try again"});
   }
 });
 
