@@ -83,14 +83,17 @@ app.post("/home", async (request, response) => {
           console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
         }
       }
+      if (authTransaction.nextStep.name === 'select-authenticator-authenticate') {
+        for (var i=0; i<authTransaction.nextStep.options.length; i++) {
+          Object.keys("Keys in options: " + );
+        }
+      } else {
+        authClient.transactionManager.clear();
+        response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+      }
     }
+
     
-    if (authTransaction.error) {
-      console.log("Error keys are:" + Object.keys(authTransaction.error));
-      console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
-    }
-    authClient.transactionManager.clear();
-    response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
     if (authTransaction.nextStep) {
