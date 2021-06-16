@@ -88,6 +88,7 @@ app.post("/home", async (request, response) => {
           console.log("Options label: " + authTransaction.nextStep.options[i].label);
           console.log("Options value: " + authTransaction.nextStep.options[i].value);
         }
+        console.log('In select-authenticator-authenticate');
         var authTransactionEmail = await authClient.idx.authenticate({ authenticator: 'email' });
         response.sendFile(__dirname + "/views/otp.html");
       } else {
@@ -118,9 +119,11 @@ app.post("/home", async (request, response) => {
 
 
 app.post("/verifyotp", async (request, response) => {
+  console.log('In Verify OTP');
   var otp = request.body.otp;
   var authTransaction = await authClient.idx.authenticate({verificationCode: otp});
   if (authTransaction.status === IdxStatus.SUCCESS) {
+    console.log("Correct OTP: " + otp);
     // handle tokens with authTransaction.tokens
     authClient.tokenManager.setTokens(authTransaction.tokens);
     const name = authTransaction.tokens.idToken.claims.name;
