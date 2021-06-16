@@ -55,9 +55,10 @@ app.post("/home", async (request, response) => {
   } else if (authTransaction.status === IdxStatus.FAILURE) {
     console.log("In here: " + authTransaction.status);
     const signoutRedirectUrl = authClient.getSignOutRedirectUrl();
+    console.log(signoutRedirectUrl);
     response.redirect(signoutRedirectUrl + "?error=Authentication Failed");
   } else {
-    console.log("In else: " + authTransaction.status);
+
   }
 });
 
