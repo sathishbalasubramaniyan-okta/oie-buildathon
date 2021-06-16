@@ -46,6 +46,8 @@ app.post("/home", async (request, response) => {
     username,
     password
   };
+  console.log("Username: " + username);
+  console.log("Password: " + password);
   const authTransaction = await authClient.idx.authenticate(authenticationOptions);
   if (authTransaction.status === IdxStatus.SUCCESS) {
     // handle tokens with authTransaction.tokens
