@@ -116,6 +116,20 @@ app.post("/home", async (request, response) => {
   }
 });
 
+
+app.post("/verifyotp", async (request, response) => {
+  var otp = request.body.otp;
+  var authTransaction = await authClient.idx.authenticate({verificationCode: otp});
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+    // handle tokens with authTransaction.tokens
+    authClient.tokenManager.setTokens(authTransaction.tokens);
+    const name = authTransaction.tokens.idToken.claims.name;
+    response.render('home.html', {"name": name});
+  } else {
+    response.sendFile(__dirname + "/views/otp.html");
+  }
+});
+
 app.post("/logout", async (request, response) => {
   await authClient.revokeAccessToken();
   const signoutRedirectUrl = authClient.getSignOutRedirectUrl();
