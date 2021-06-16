@@ -39,6 +39,10 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + "/views/index.html");
 });
 
+app.get("/otp", (request, response) => {
+  response.sendFile(__dirname + "/views/otp.html");
+});
+
 app.post("/home", async (request, response) => {
   var username = request.body.username;
   var password = request.body.password;
@@ -130,7 +134,7 @@ app.post("/verifyotp", async (request, response) => {
     response.render('home.html', {"name": name});
   } else {
     console.log("Incorrect OTP: " + otp);
-    response.sendFile(__dirname + "/views/otp.html");
+    response.redirect('/otp?error=invalid otp');
   }
 });
 
