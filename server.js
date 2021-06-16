@@ -68,7 +68,7 @@ app.post("/home", async (request, response) => {
       console.log("Error keys are:" + Object.keys(authTransaction.error));
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
-    response.redirect("https://oie-buildathon.glitch.me/");
+    response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
   } else if (authTransaction.status === IdxStatus.PENDING) {
     console.log("In IdxStatus Pending: ");
     if (authTransaction.nextStep) {
@@ -85,7 +85,7 @@ app.post("/home", async (request, response) => {
       console.log("Error keys are:" + Object.keys(authTransaction.error));
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
-    response.redirect("https://oie-buildathon.glitch.me/");
+    response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
     if (authTransaction.nextStep) {
@@ -102,7 +102,7 @@ app.post("/home", async (request, response) => {
       console.log("Error keys are:" + Object.keys(authTransaction.error));
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
-    response.redirect("https://oie-buildathon.glitch.me/");
+    response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
   }
 });
 
