@@ -50,9 +50,10 @@ app.post("/home", async (request, response) => {
 const authTransaction = await authClient.idx.authenticate(authenticationOptions);
 console.log("Authenticate function called");
 console.log("Auth Transaction status: " + authTransaction.status);
-if (authTransaction.status === 'SUCCESS') {
+if (authTransaction.status == 0) {
   // handle tokens with authTransaction.tokens
   console.log('Authentication Success');
+  console.log('Access Token: ' + authTransaction.tokens.accessToken);
   authClient.tokenManager.setTokens(authTransaction.tokens);
   response.render('home.html', {"name": "Sathish"});
 }
