@@ -73,6 +73,7 @@ app.post("/home", async (request, response) => {
     console.log("In IdxStatus Pending: ");
     if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
+      console.log("Next Step name:" + authTransaction.nextStep.name);
       if (authTransaction.nextStep.inputs) {
         for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
           console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
