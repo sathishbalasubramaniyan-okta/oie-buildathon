@@ -52,15 +52,17 @@ app.post("/home", async (request, response) => {
     authClient.tokenManager.setTokens(authTransaction.tokens);
     const name = authTransaction.tokens.idToken.claims.name;
     response.render('home.html', {"name": name});
-  } else if (authTransaction.status === IdxStatus.SUCCESS) {
-
-
+  } else if (authTransaction.status === IdxStatus.FAILURE) {
+    console.log("In here: " + authTransaction.status);
+    const signoutRedirectUrl = authClient.getSignOutRedirectUrl();
+    response.redirect(signoutRedirectUrl + "?error=Authentication Failed");
+  } else {
+    console.log("In else: " + authTransaction.status);
   }
 });
 
 app.post("/logout", async (request, response) => {
   await authClient.revokeAccessToken();
-  authClient.tokenManager.clear();
   const signoutRedirectUrl = authClient.getSignOutRedirectUrl();
   response.redirect(signoutRedirectUrl);
 });
