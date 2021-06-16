@@ -56,20 +56,34 @@ app.post("/home", async (request, response) => {
     console.log("In IdxStatus Failure: ");
     if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
+      if (authTransaction.nextStep.inputs) {
+        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
+          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
+          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
+        }
+      }
     }
     
     if (authTransaction.error) {
-      console.log(Object.keys(authTransaction.error));
+      console.log("Error keys are:" + Object.keys(authTransaction.error));
+      console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
     response.redirect("https://oie-buildathon.glitch.me/");
   } else if (authTransaction.status === IdxStatus.PENDING) {
     console.log("In IdxStatus Pending: ");
     if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
+      if (authTransaction.nextStep.inputs) {
+        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
+          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
+          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
+        }
+      }
     }
     
     if (authTransaction.error) {
-      console.log(Object.keys(authTransaction.error));
+      console.log("Error keys are:" + Object.keys(authTransaction.error));
+      console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
     response.redirect("https://oie-buildathon.glitch.me/");
   } else {
@@ -85,7 +99,8 @@ app.post("/home", async (request, response) => {
     }
     
     if (authTransaction.error) {
-      console.log(Object.keys(authTransaction.error));
+      console.log("Error keys are:" + Object.keys(authTransaction.error));
+      console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
     response.redirect("https://oie-buildathon.glitch.me/");
   }
