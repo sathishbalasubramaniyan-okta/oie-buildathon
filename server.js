@@ -18,7 +18,7 @@ var config = {
   scopes: ['openid', 'profile', 'email'],
   postLogoutRedirectUri: 'https://oie-buildathon.glitch.me',
   responseType: 'code',
-  pkce: false
+  pkce: true
 };
 
 var authClient = new OktaAuth(config);
@@ -48,6 +48,8 @@ app.post("/home", async (request, response) => {
     password
   };
 const authTransaction = await authClient.idx.authenticate(authenticationOptions);
+console.log("Authenticate function called");
+console.log("Auth Transaction status: " + authTransaction.status);
 if (authTransaction.status === 'SUCCESS') {
   // handle tokens with authTransaction.tokens
   console.log('Authentication Success');
