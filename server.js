@@ -7,6 +7,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const mustacheExpress = require('mustache-express');
 const OktaAuth = require('@okta/okta-auth-js').OktaAuth;
+const { IdxStatus } = require('@okta/okta-auth-js');
 
 var config = {
   // Required config
@@ -50,10 +51,13 @@ app.post("/home", async (request, response) => {
 const authTransaction = await authClient.idx.authenticate(authenticationOptions);
 console.log("Authenticate function called");
 console.log("Auth Transaction status: " + authTransaction.status);
-if (authTransaction.status == 0) {
+if (authTransaction.status === IdxStatus.SUCCESS) {
   // handle tokens with authTransaction.tokens
   console.log('Authentication Success');
-  console.log('Access Token: ' + authTransaction.tokens.accessToken);
+  console.log('Access Token: ' + authTransaction.tokens.accessToken.accessToken);
+  console.log('Access Token: ' + authTransaction.tokens.accessToken.accessToken);
+  console.log('Keys in AT object are: ' + Object.keys(authTransaction.tokens.accessToken));
+  console.log('Keys in IDT object are: ' + Object.keys(authTransaction.tokens.idToken));
   authClient.tokenManager.setTokens(authTransaction.tokens);
   response.render('home.html', {"name": "Sathish"});
 }
