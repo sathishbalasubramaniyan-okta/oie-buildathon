@@ -40,31 +40,27 @@ app.get("/", (request, response) => {
 });
 
 app.post("/home", async (request, response) => {
-  console.log("Username is: " + request.body.username);
-  console.log("Password is: " + request.body.password);
   var username = request.body.username;
   var password = request.body.password;
   const authenticationOptions = {
     username,
     password
   };
-const authTransaction = await authClient.idx.authenticate(authenticationOptions);
-console.log("Authenticate function called");
-console.log("Auth Transaction status: " + authTransaction.status);
-if (authTransaction.status === IdxStatus.SUCCESS) {
-  // handle tokens with authTransaction.tokens
-  console.log('Authentication Success');
-  console.log('Access Token: ' + authTransaction.tokens.accessToken.accessToken);
-  console.log('Access Token: ' + authTransaction.tokens.accessToken.accessToken);
-  console.log('Keys in AT object are: ' + Object.keys(authTransaction.tokens.accessToken));
-  console.log('Keys in IDT object are: ' + Object.keys(authTransaction.tokens.idToken));
-  authClient.tokenManager.setTokens(authTransaction.tokens);
-  response.render('home.html', {"name": "Sathish"});
-}
+  const authTransaction = await authClient.idx.authenticate(authenticationOptions);
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+    // handle tokens with authTransaction.tokens
+    authClient.tokenManager.setTokens(authTransaction.tokens);
+    const name = authTransaction.tokens.idToken.claims.name;
+    response.render('home.html', {"name": name});
+  } else if (authTransaction.status === IdxStatus.SUCCESS) {
+
+
+  }
 });
 
 app.post("/logout", async (request, response) => {
   await authClient.revokeAccessToken();
+  authClient.tokenManager.clear();
   const signoutRedirectUrl = authClient.getSignOutRedirectUrl();
   response.redirect(signoutRedirectUrl);
 });
