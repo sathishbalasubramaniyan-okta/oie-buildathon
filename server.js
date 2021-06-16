@@ -85,8 +85,11 @@ app.post("/home", async (request, response) => {
       }
       if (authTransaction.nextStep.name === 'select-authenticator-authenticate') {
         for (var i=0; i<authTransaction.nextStep.options.length; i++) {
-          Object.keys("Keys in options: " + );
+          console.log("Options label: " + authTransaction.nextStep.options[i].label);
+          console.log("Options value: " + authTransaction.nextStep.options[i].value);
         }
+        authClient.transactionManager.clear();
+        response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
       } else {
         authClient.transactionManager.clear();
         response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
