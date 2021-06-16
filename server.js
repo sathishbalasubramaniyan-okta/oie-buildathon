@@ -48,7 +48,7 @@ app.post("/home", async (request, response) => {
   };
   console.log("Username: " + username);
   console.log("Password: " + password);
-  const authTransaction = await authClient.idx.authenticate(authenticationOptions);
+  var authTransaction = await authClient.idx.authenticate(authenticationOptions);
   if (authTransaction.status === IdxStatus.SUCCESS) {
     // handle tokens with authTransaction.tokens
     authClient.tokenManager.setTokens(authTransaction.tokens);
@@ -76,6 +76,7 @@ app.post("/home", async (request, response) => {
     if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
       console.log("Next Step name:" + authTransaction.nextStep.name);
+      console.log("Can Skip:" + authTransaction.nextStep.canSkip);
       if (authTransaction.nextStep.inputs) {
         for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
           console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
@@ -88,6 +89,7 @@ app.post("/home", async (request, response) => {
       console.log("Error keys are:" + Object.keys(authTransaction.error));
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
+    authClient.transactionManager.clear();
     response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
