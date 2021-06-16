@@ -53,12 +53,35 @@ app.post("/home", async (request, response) => {
     const name = authTransaction.tokens.idToken.claims.name;
     response.render('home.html', {"name": name});
   } else if (authTransaction.status === IdxStatus.FAILURE) {
-    console.log("In here: " + authTransaction.status);
-    const signoutRedirectUrl = authClient.getSignOutRedirectUrl();
-    console.log(signoutRedirectUrl);
-    response.redirect(signoutRedirectUrl + "?error=Authentication Failed");
-  } else {
+    console.log("In IdxStatus Failed: ");
+    if (authTransaction.nextStep) {
+      console.log(Object.keys(authTransaction.nextStep));
+    }
+    
+    if (authTransaction.error) {
+      console.log(Object.keys(authTransaction.error));
+    }
+    response.redirect("https://oie-buildathon.glitch.me/");
+  } else if (authTransaction.status === IdxStatus.PENDING) {
+    console.log("In IdxStatus Pending: ");
+    if (authTransaction.nextStep) {
+      console.log(Object.keys(authTransaction.nextStep));
+    }
+    
+    if (authTransaction.error) {
+      console.log(Object.keys(authTransaction.error));
+    }
 
+  } else {
+    console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
+    if (authTransaction.nextStep) {
+      console.log(Object.keys(authTransaction.nextStep));
+    }
+    
+    if (authTransaction.error) {
+      console.log(Object.keys(authTransaction.error));
+    }
+    response.redirect("https://oie-buildathon.glitch.me/");
   }
 });
 
