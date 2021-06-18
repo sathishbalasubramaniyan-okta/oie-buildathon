@@ -26,6 +26,15 @@ h1 {
   margin: 10% auto
 }
 
+.form-class-passwordreset {
+  background-color: #eee;
+  display: grid;
+  grid-gap: 1em;
+  padding: 30px;
+  max-width: 70ch;
+  margin: 10% auto
+}
+
 input {
   border: 1px solid silver;
   display: inline-block;
@@ -33,6 +42,26 @@ input {
   margin-bottom: 10px;
   padding: 5px;
   width: 60%
+}
+
+#newpassword {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-left: 15%;
+  padding: 5px;
+  width: 50%
+}
+
+#confirmnewpassword {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-left: 4%;
+  padding: 5px;
+  width: 50%
 }
 
 #username, #otp {
