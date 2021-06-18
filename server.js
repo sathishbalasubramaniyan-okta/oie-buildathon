@@ -151,32 +151,18 @@ app.post("/otppasswordreset", async (request, response) => {
   if (authTransaction.status === IdxStatus.PENDING) {
     console.log("Auth Transaction Status Pending");
     // handle tokens with authTransaction.tokens
-        if (authTransaction.nextStep) {
+      if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
       console.log("Next Step name:" + authTransaction.nextStep.name);
-      console.log("Can Skip:" + authTransaction.nextStep.canSkip);
-      if (authTransaction.nextStep.inputs) {
-        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
-          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
-          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
-        }
-      }
-      if (authTransaction.nextStep.name === 'select-authenticator-authenticate') {
-        for (var i=0; i<authTransaction.nextStep.options.length; i++) {
-          console.log("Options label: " + authTransaction.nextStep.options[i].label);
-          console.log("Options value: " + authTransaction.nextStep.options[i].value);
-        }
-        console.log('In select-authenticator-authenticate');
-        var authTransactionEmail = await authClient.idx.authenticate({ authenticator: 'email' });
-        response.sendFile(__dirname + "/views/otp.html");
+      if (authTransaction.nextStep.name) {
+        response.sendFile(__dirname + "/views/verifyotppasswordreset.html");
       } else {
-        authClient.transactionManager.clear();
-        response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+        response.sendFile(__dirname + "/views/username.html");
       }
     }
   } else {
-    console.log("Incorrect OTP: " + otp);
-    response.sendFile(__dirname + "/views/otp.html");
+    console.log("Auth Transaction Status: " + authTransaction.status);
+    response.sendFile(__dirname + "/views/username.html");
   }
 });
 
