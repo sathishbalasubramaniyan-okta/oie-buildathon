@@ -141,6 +141,23 @@ app.post("/verifyotp", async (request, response) => {
   }
 });
 
+
+app.post("/verifyotppasswordreset", async (request, response) => {
+  console.log('In Verify OTP password reset');
+  var otp = request.body.otp;
+  var authTransaction = await authClient.idx.authenticate({verificationCode: otp});
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+    console.log("Correct OTP: " + otp);
+    // handle tokens with authTransaction.tokens
+    authClient.tokenManager.setTokens(authTransaction.tokens);
+    const name = authTransaction.tokens.idToken.claims.name;
+    response.render('home.html', {"name": name});
+  } else {
+    console.log("Incorrect OTP: " + otp);
+    response.sendFile(__dirname + "/views/otp.html");
+  }
+});
+
 app.post("/otppasswordreset", async (request, response) => {
   console.log('In otppasswordreset');
   var username = request.body.username;
@@ -154,7 +171,7 @@ app.post("/otppasswordreset", async (request, response) => {
       if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
       console.log("Next Step name:" + authTransaction.nextStep.name);
-      if (authTransaction.nextStep.name) {
+      if (authTransaction.nextStep.name === 'challenge-authenticator' || authTransaction.nextStep.name === 'authenticator-verification-data') {
         response.sendFile(__dirname + "/views/verifyotppasswordreset.html");
       } else {
         response.sendFile(__dirname + "/views/username.html");
