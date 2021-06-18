@@ -170,6 +170,7 @@ app.post("/submitnewpassword", async (request, response) => {
   console.log('New Password: ' + newpassword);
   var authTransaction = await authClient.idx.recoverPassword({password: newpassword});
   if (authTransaction.status === IdxStatus.SUCCESS) {
+      console.log("In IdxStatus Success: ");
       // handle tokens with authTransaction.tokens
       authClient.tokenManager.setTokens(authTransaction.tokens);
       const name = authTransaction.tokens.idToken.claims.name;
