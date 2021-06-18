@@ -199,6 +199,10 @@ app.post("/submitnewpassword", async (request, response) => {
       console.log(Object.keys(authTransaction));
       console.log(Object.keys(authTransaction.messages));
       console.log(authTransaction.messages.length);
+      for (var i=0; i<authTransaction.messages.length; i++) {
+            console.log("Auth transaction message keys: " + Object.keys(authTransaction.messages[i]));
+            console.log(authTransaction.messages[i].message);
+          }
       if (authTransaction.nextStep) {
         console.log(Object.keys(authTransaction.nextStep));
         console.log("Next Step name:" + authTransaction.nextStep.name);
