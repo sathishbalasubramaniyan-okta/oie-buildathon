@@ -167,6 +167,7 @@ app.post("/verifyotppasswordreset", async (request, response) => {
 app.post("/submitnewpassword", async (request, response) => {
   console.log('In submit new password');
   var newpassword = request.body.newpassword;
+  console.log('New Password: ' + newpassword);
   var authTransaction = await authClient.idx.recoverPassword({password: newpassword});
   if (authTransaction.status === IdxStatus.SUCCESS) {
       // handle tokens with authTransaction.tokens
