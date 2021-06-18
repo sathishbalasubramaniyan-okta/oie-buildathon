@@ -39,6 +39,10 @@ app.get("/", (request, response) => {
   response.sendFile(__dirname + "/views/index.html");
 });
 
+app.get("/username", (request, response) => {
+  response.sendFile(__dirname + "/views/username.html");
+});
+
 
 app.post("/home", async (request, response) => {
   var username = request.body.username;
