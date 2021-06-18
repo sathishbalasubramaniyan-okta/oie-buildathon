@@ -168,15 +168,16 @@ app.post("/submitnewpassword", async (request, response) => {
   console.log('In submit new password');
   var newpassword = request.body.newpassword;
   var authTransaction = await authClient.idx.recoverPassword({password: newpassword});
-if (authTransaction.status === IdxStatus.SUCCESS) {
-    // handle tokens with authTransaction.tokens
-    authClient.tokenManager.setTokens(authTransaction.tokens);
-    const name = authTransaction.tokens.idToken.claims.name;
-    response.render('home.html', {"name": name});
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+      // handle tokens with authTransaction.tokens
+      authClient.tokenManager.setTokens(authTransaction.tokens);
+      const name = authTransaction.tokens.idToken.claims.name;
+      response.render('home.html', {"name": name});
   } else if (authTransaction.status === IdxStatus.FAILURE) {
     console.log("In IdxStatus Failure: ");
     if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
+      console.log("Next Step name:" + authTransaction.nextStep.name);
       if (authTransaction.nextStep.inputs) {
         for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
           console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
@@ -189,37 +190,34 @@ if (authTransaction.status === IdxStatus.SUCCESS) {
         console.log("Error keys are:" + Object.keys(authTransaction.error));
         console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
       }
-      authClient.transactionManager.clear();
-      response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+      
+      response.sendFile(__dirname + "/views/collectnewpassword.html");
     } else if (authTransaction.status === IdxStatus.PENDING) {
-    console.log("In IdxStatus Pending: ");
-    if (authTransaction.nextStep) {
-      console.log(Object.keys(authTransaction.nextStep));
-      console.log("Next Step name:" + authTransaction.nextStep.name);
-      console.log("Can Skip:" + authTransaction.nextStep.canSkip);
-      if (authTransaction.nextStep.inputs) {
-        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
-          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
-          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
+      console.log("In IdxStatus Pending: ");
+      if (authTransaction.nextStep) {
+        console.log(Object.keys(authTransaction.nextStep));
+        console.log("Next Step name:" + authTransaction.nextStep.name);
+        console.log("Can Skip:" + authTransaction.nextStep.canSkip);
+        if (authTransaction.nextStep.inputs) {
+          for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
+            console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
+            console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
+          }
         }
       }
-      if (authTransaction.nextStep.name === 'select-authenticator-authenticate') {
-        for (var i=0; i<authTransaction.nextStep.options.length; i++) {
-          console.log("Options label: " + authTransaction.nextStep.options[i].label);
-          console.log("Options value: " + authTransaction.nextStep.options[i].value);
-        }
-        console.log('In select-authenticator-authenticate');
-        var authTransactionEmail = await authClient.idx.authenticate({ authenticator: 'email' });
-        response.sendFile(__dirname + "/views/otp.html");
-      } else {
-        authClient.transactionManager.clear();
-        response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+      
+      if (authTransaction.error) {
+        console.log("Error keys are:" + Object.keys(authTransaction.error));
+        console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
       }
-    }
+    
+      response.sendFile(__dirname + "/views/collectnewpassword.html");
+    
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
     if (authTransaction.nextStep) {
       console.log(Object.keys(authTransaction.nextStep));
+      console.log("Next Step name:" + authTransaction.nextStep.name);
       if (authTransaction.nextStep.inputs) {
         for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
           console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
@@ -232,8 +230,8 @@ if (authTransaction.status === IdxStatus.SUCCESS) {
       console.log("Error keys are:" + Object.keys(authTransaction.error));
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
-    authClient.transactionManager.clear();
-    response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+    
+    response.sendFile(__dirname + "/views/collectnewpassword.html");
   }
 });
 
