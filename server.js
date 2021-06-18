@@ -196,6 +196,9 @@ app.post("/submitnewpassword", async (request, response) => {
       response.sendFile(__dirname + "/views/collectnewpassword.html");
     } else if (authTransaction.status === IdxStatus.PENDING) {
       console.log("In IdxStatus Pending: ");
+      console.log(Object.keys(authTransaction));
+      console.log(Object.keys(authTransaction.messages));
+      console.log(authTransaction.messages.length);
       if (authTransaction.nextStep) {
         console.log(Object.keys(authTransaction.nextStep));
         console.log("Next Step name:" + authTransaction.nextStep.name);
