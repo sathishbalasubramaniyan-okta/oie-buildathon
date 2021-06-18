@@ -152,7 +152,7 @@ app.post("/verifyotppasswordreset", async (request, response) => {
     if (authTransaction.nextStep) {
         console.log(Object.keys(authTransaction.nextStep));
         console.log("Next Step name:" + authTransaction.nextStep.name);
-        if (authTransaction.nextStep.name) {
+        if (authTransaction.nextStep.name === 'reset-authenticator') {
           response.sendFile(__dirname + "/views/collectnewpassword.html");
         } else {
           response.sendFile(__dirname + "/views/verifyotppasswordreset.html");
