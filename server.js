@@ -36,7 +36,7 @@ app.set('views', __dirname + '/views');
 
 // https://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/views/index.html");
+  response.render('index.html', {"greeting": "Sign into the OIE experience!"});
 });
 
 app.get("/username", (request, response) => {
@@ -76,8 +76,7 @@ app.post("/home", async (request, response) => {
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
     authClient.transactionManager.clear();
-    response.render('index.html', {"name": name});
-    response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+    response.render('index.html', {"greeting": "Invalid Credentials!"});
   } else if (authTransaction.status === IdxStatus.PENDING) {
     console.log("In IdxStatus Pending: ");
     if (authTransaction.nextStep) {
@@ -100,7 +99,7 @@ app.post("/home", async (request, response) => {
         response.sendFile(__dirname + "/views/otp.html");
       } else {
         authClient.transactionManager.clear();
-        response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+        response.render('index.html', {"greeting": "Invalid Credentials!"});
       }
     }
     
@@ -121,7 +120,7 @@ app.post("/home", async (request, response) => {
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
     authClient.transactionManager.clear();
-    response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
+    response.render('index.html', {"greeting": "Invalid Credentials!"});
   }
 });
 
