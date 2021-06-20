@@ -76,6 +76,7 @@ app.post("/home", async (request, response) => {
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
     authClient.transactionManager.clear();
+    response.render('index.html', {"name": name});
     response.redirect("https://oie-buildathon.glitch.me?error=Invalid Credentials");
   } else if (authTransaction.status === IdxStatus.PENDING) {
     console.log("In IdxStatus Pending: ");
