@@ -96,7 +96,7 @@ app.post("/home", async (request, response) => {
         }
         console.log('In select-authenticator-authenticate');
         var authTransactionEmail = await authClient.idx.authenticate({ authenticator: 'email' });
-        response.sendFile(__dirname + "/views/otp.html");
+        response.render('otp.html', {"otp_text": "Enter the OTP you received to authenticate!"});
       } else {
         authClient.transactionManager.clear();
         response.render('index.html', {"greeting": "Invalid Credentials!"});
@@ -137,7 +137,7 @@ app.post("/verifyotp", async (request, response) => {
     response.render('home.html', {"name": name});
   } else {
     console.log("Incorrect OTP: " + otp);
-    response.sendFile(__dirname + "/views/otp.html");
+    response.render('otp.html', {"otp_text": "Incorrect OTP!"});
   }
 });
 
