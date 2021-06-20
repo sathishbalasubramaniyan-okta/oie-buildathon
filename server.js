@@ -153,7 +153,7 @@ app.post("/verifyotppasswordreset", async (request, response) => {
         console.log(Object.keys(authTransaction.nextStep));
         console.log("Next Step name:" + authTransaction.nextStep.name);
         if (authTransaction.nextStep.name === 'reset-authenticator') {
-          response.sendFile(__dirname + "/views/collectnewpassword.html");
+          response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
         } else {
           response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Invalid OTP!"});
         }
@@ -193,7 +193,7 @@ app.post("/submitnewpassword", async (request, response) => {
         console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
       }
       
-      response.sendFile(__dirname + "/views/collectnewpassword.html");
+      response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
     } else if (authTransaction.status === IdxStatus.PENDING) {
       console.log("In IdxStatus Pending: ");
       console.log(Object.keys(authTransaction));
@@ -220,9 +220,11 @@ app.post("/submitnewpassword", async (request, response) => {
         console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
       }
     
-      
-      response.render('collectnewpassword.html', {"new_password_text": authTransaction.messages[i].message});
-      
+      if (authTransaction.messages) {
+        response.render('collectnewpassword.html', {"new_password_text": authTransaction.messages[0].message});
+      } else {
+        response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
+      } 
     
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
@@ -242,7 +244,7 @@ app.post("/submitnewpassword", async (request, response) => {
       console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
     }
     
-    response.sendFile(__dirname + "/views/collectnewpassword.html");
+    response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
   }
 });
 
