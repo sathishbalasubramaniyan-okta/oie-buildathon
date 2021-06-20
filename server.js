@@ -155,12 +155,12 @@ app.post("/verifyotppasswordreset", async (request, response) => {
         if (authTransaction.nextStep.name === 'reset-authenticator') {
           response.sendFile(__dirname + "/views/collectnewpassword.html");
         } else {
-          response.sendFile(__dirname + "/views/verifyotppasswordreset.html");
+          response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Invalid OTP!"});
         }
       }
   } else {
     console.log("Incorrect OTP: " + otp);
-    response.sendFile(__dirname + "/views/verifyotppasswordreset.html");
+    response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Invalid OTP!"});
   }
 });
 
@@ -220,7 +220,9 @@ app.post("/submitnewpassword", async (request, response) => {
         console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
       }
     
-      response.sendFile(__dirname + "/views/collectnewpassword.html");
+      
+      response.render('collectnewpassword.html', {"new_password_text": authTransaction.messages[i].message});
+      
     
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
@@ -258,7 +260,7 @@ app.post("/otppasswordreset", async (request, response) => {
         console.log(Object.keys(authTransaction.nextStep));
         console.log("Next Step name:" + authTransaction.nextStep.name);
         if (authTransaction.nextStep.name === 'challenge-authenticator' || authTransaction.nextStep.name === 'authenticator-verification-data') {
-          response.sendFile(__dirname + "/views/verifyotppasswordreset.html");
+          response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Enter the OTP you received to reset your password!"});
         } else {
           response.sendFile(__dirname + "/views/username.html");
         }
