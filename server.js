@@ -61,48 +61,26 @@ app.post("/home", async (request, response) => {
     response.render('home.html', {"name": name});
   } else if (authTransaction.status === IdxStatus.FAILURE) {
     console.log("In IdxStatus Failure: ");
-    if (authTransaction.nextStep) {
-      console.log(Object.keys(authTransaction.nextStep));
-      if (authTransaction.nextStep.inputs) {
-        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
-          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
-          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
-        }
-      }
-    }
-    
-    if (authTransaction.error) {
-      console.log("Error keys are:" + Object.keys(authTransaction.error));
-      console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
-    }
     authClient.transactionManager.clear();
     response.render('index.html', {"greeting": "Invalid Credentials!"});
   } else if (authTransaction.status === IdxStatus.PENDING) {
     console.log("In IdxStatus Pending: ");
     if (authTransaction.nextStep) {
-      console.log(Object.keys(authTransaction.nextStep));
       console.log("Next Step name:" + authTransaction.nextStep.name);
       console.log("Can Skip:" + authTransaction.nextStep.canSkip);
-      if (authTransaction.nextStep.inputs) {
-        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
-          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
-          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
-        }
-      }
       if (authTransaction.nextStep.name === 'select-authenticator-authenticate') {
+        console.log('In select-authenticator-authenticate');
         for (var i=0; i<authTransaction.nextStep.options.length; i++) {
           console.log("Options label: " + authTransaction.nextStep.options[i].label);
           console.log("Options value: " + authTransaction.nextStep.options[i].value);
         }
-        console.log('In select-authenticator-authenticate');
         var authTransactionEmail = await authClient.idx.authenticate({ authenticator: 'email' });
         response.render('otp.html', {"otp_text": "Enter the OTP you received to authenticate!"});
       } else {
         authClient.transactionManager.clear();
         response.render('index.html', {"greeting": "Invalid Credentials!"});
       }
-    }
-    
+    } 
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
     if (authTransaction.nextStep) {
