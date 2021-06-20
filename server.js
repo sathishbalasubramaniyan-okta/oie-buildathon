@@ -83,20 +83,6 @@ app.post("/home", async (request, response) => {
     } 
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
-    if (authTransaction.nextStep) {
-      console.log(Object.keys(authTransaction.nextStep));
-      if (authTransaction.nextStep.inputs) {
-        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
-          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
-          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
-        }
-      }
-    }
-    
-    if (authTransaction.error) {
-      console.log("Error keys are:" + Object.keys(authTransaction.error));
-      console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
-    }
     authClient.transactionManager.clear();
     response.render('index.html', {"greeting": "Invalid Credentials!"});
   }
@@ -128,7 +114,6 @@ app.post("/verifyotppasswordreset", async (request, response) => {
     console.log("Auth Transaction Status Pending after verifying OTP for password reset");
     // handle tokens with authTransaction.tokens
     if (authTransaction.nextStep) {
-        console.log(Object.keys(authTransaction.nextStep));
         console.log("Next Step name:" + authTransaction.nextStep.name);
         if (authTransaction.nextStep.name === 'reset-authenticator') {
           response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
@@ -148,80 +133,23 @@ app.post("/submitnewpassword", async (request, response) => {
   console.log('New Password: ' + newpassword);
   var authTransaction = await authClient.idx.recoverPassword({password: newpassword});
   if (authTransaction.status === IdxStatus.SUCCESS) {
-      console.log("In IdxStatus Success: ");
+      console.log("In IdxStatus Success for recover password: ");
       // handle tokens with authTransaction.tokens
       authClient.tokenManager.setTokens(authTransaction.tokens);
       const name = authTransaction.tokens.idToken.claims.name;
       response.render('home.html', {"name": name});
   } else if (authTransaction.status === IdxStatus.FAILURE) {
-    console.log("In IdxStatus Failure: ");
-    if (authTransaction.nextStep) {
-      console.log(Object.keys(authTransaction.nextStep));
-      console.log("Next Step name:" + authTransaction.nextStep.name);
-      if (authTransaction.nextStep.inputs) {
-        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
-          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
-          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
-        }
-      }
-    }
-    
-    if (authTransaction.error) {
-        console.log("Error keys are:" + Object.keys(authTransaction.error));
-        console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
-      }
-      
+      console.log("In IdxStatus Failure: ");
       response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
-    } else if (authTransaction.status === IdxStatus.PENDING) {
-      console.log("In IdxStatus Pending: ");
-      console.log(Object.keys(authTransaction));
-      console.log(Object.keys(authTransaction.messages));
-      console.log(authTransaction.messages.length);
-      for (var i=0; i<authTransaction.messages.length; i++) {
-            console.log("Auth transaction message keys: " + Object.keys(authTransaction.messages[i]));
-            console.log(authTransaction.messages[i].message);
-          }
-      if (authTransaction.nextStep) {
-        console.log(Object.keys(authTransaction.nextStep));
-        console.log("Next Step name:" + authTransaction.nextStep.name);
-        console.log("Can Skip:" + authTransaction.nextStep.canSkip);
-        if (authTransaction.nextStep.inputs) {
-          for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
-            console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
-            console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
-          }
-        }
-      }
-      
-      if (authTransaction.error) {
-        console.log("Error keys are:" + Object.keys(authTransaction.error));
-        console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
-      }
-    
+  } else if (authTransaction.status === IdxStatus.PENDING) {
+      console.log("In IdxStatus Pending for recover password: ");
       if (authTransaction.messages) {
         response.render('collectnewpassword.html', {"new_password_text": authTransaction.messages[0].message});
       } else {
         response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
       } 
-    
   } else {
-    console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
-    if (authTransaction.nextStep) {
-      console.log(Object.keys(authTransaction.nextStep));
-      console.log("Next Step name:" + authTransaction.nextStep.name);
-      if (authTransaction.nextStep.inputs) {
-        for (var i=0; i<authTransaction.nextStep.inputs.length; i++) {
-          console.log("Input name: " + authTransaction.nextStep.inputs[i].name);
-          console.log("Input required: " + authTransaction.nextStep.inputs[i].required);
-        }
-      }
-    }
-    
-    if (authTransaction.error) {
-      console.log("Error keys are:" + Object.keys(authTransaction.error));
-      console.log("Error messages are:" + Object.keys(authTransaction.error.messages));
-    }
-    
+    console.log("In IdxStatus not SUCCESS, FAILURE, PENDING for recover password: ");
     response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
   }
 });
@@ -234,10 +162,8 @@ app.post("/otppasswordreset", async (request, response) => {
       authenticators: ['email']
     });
   if (authTransaction.status === IdxStatus.PENDING) {
-      console.log("Auth Transaction Status Pending");
-    // handle tokens with authTransaction.tokens
+      console.log("Auth Transaction Status Pending OTP password reset");
       if (authTransaction.nextStep) {
-        console.log(Object.keys(authTransaction.nextStep));
         console.log("Next Step name:" + authTransaction.nextStep.name);
         if (authTransaction.nextStep.name === 'challenge-authenticator' || authTransaction.nextStep.name === 'authenticator-verification-data') {
           response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Enter the OTP you received to reset your password!"});
@@ -246,7 +172,7 @@ app.post("/otppasswordreset", async (request, response) => {
         }
       }
   } else {
-    console.log("Auth Transaction Status: " + authTransaction.status);
+    console.log("Auth Transaction Status OTP password reset: " + authTransaction.status);
     response.sendFile(__dirname + "/views/username.html");
   }
 });
