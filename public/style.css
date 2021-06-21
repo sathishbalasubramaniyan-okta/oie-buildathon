@@ -26,7 +26,7 @@ h1 {
   margin: 10% auto
 }
 
-.form-class-passwordreset {
+.form-class-passwordreset, .form-class-userreg {
   background-color: #eee;
   display: grid;
   grid-gap: 1em;

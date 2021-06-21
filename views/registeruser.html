@@ -14,17 +14,6 @@
     
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css">
-    
-    <script>
-      function validateForm() {
-        var password = document.getElementById("registerpassword").value;  
-        var confirmpassword = document.getElementById("confirmregisterpassword").value; 
-        if ((!password) || (!confirmpassword) || (password !== confirmpassword)) {
-          alert("Both password fields should be filled and should match");
-          return false;
-        }
-      }
-    </script>
 
   </head>
   <body>
@@ -41,14 +30,6 @@
         <div class="form-group">
           <label for="email">Email</label>
           <input type="text" id="email" name="email">
-        </div>
-        <div class="form-group">
-          <label for="registerpassword">Password</label>
-          <input type="password" id="registerpassword" name="registerpassword">
-        </div>
-        <div class="form-group">
-          <label for="confirmregisterpassword">Confirm Password</label>
-          <input type="password" id="confirmregisterpassword" name="confirmregisterpassword">
         </div>
         <input id="submit" type="submit" value="Submit">
         <a id="existinguser" href="existinguser">Existing user? Sign In</a>

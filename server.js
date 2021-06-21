@@ -55,7 +55,6 @@ app.post("/register", async (request, response) => {
   var firstname = request.body.firstname;
   var lastname = request.body.lastname;
   var email = request.body.email;
-  var password = request.body.registerpassword;
   
   var authTransaction = await authClient.idx.register({ 
     firstName: firstname,
@@ -64,7 +63,6 @@ app.post("/register", async (request, response) => {
     authenticators: ['password']
   });
   
-  authTransaction = await authClient.idx.register({ password: password });
   
   if (authTransaction.status === IdxStatus.SUCCESS) {
       console.log("In IdxStatus Success for register user: ");
@@ -77,14 +75,36 @@ app.post("/register", async (request, response) => {
       console.log(Object.keys(authTransaction));
       if (authTransaction.nextStep) {
         console.log("Next Step name:" + authTransaction.nextStep.name);
-        if (authTransaction.nextStep.name === 'select-authenticator-enroll') {
-          var authTransactionPwd = await authClient.idx.register({ authenticator: 'password' });
-          console.log(authTransactionPwd.status);
-          response.render('verifyotpregister.html', {"otp_register_text": "Enter the OTP you received to verify your email"});
-        } else {
-          authClient.transactionManager.clear();
-          response.render('registeruser.html', {"greeting": "Registration Failed"});
-        }
+        response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your password"});
+      }
+  } else {
+      console.log("In IdxStatus non success for register user: ");
+      authClient.transactionManager.clear();
+      response.render('registeruser.html', {"greeting": "Registration Failed"});
+  }
+});
+
+app.post("/submitnewpassworduserreg", async (request, response) => {
+  var newpassword = request.body.newpassword;
+
+  
+  var authTransaction = await authClient.idx.register({ 
+    password: newpassword
+  });
+  
+  
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+      console.log("In IdxStatus Success for register user: ");
+      // handle tokens with authTransaction.tokens
+      authClient.tokenManager.setTokens(authTransaction.tokens);
+      const name = authTransaction.tokens.idToken.claims.name;
+      response.render('home.html', {"name": name});
+  } else if (authTransaction.status === IdxStatus.PENDING) {
+      console.log("Auth Transaction Status Pending Register User");
+      console.log(Object.keys(authTransaction));
+      if (authTransaction.nextStep) {
+        console.log("Next Step name:" + authTransaction.nextStep.name);
+        response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your password"});
       }
   } else {
       console.log("In IdxStatus non success for register user: ");
