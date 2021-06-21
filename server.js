@@ -74,11 +74,13 @@ app.post("/register", async (request, response) => {
       response.render('home.html', {"name": name});
   } else {
       console.log("In IdxStatus non success for register user: ");
+      var errorMsg = "Registration Failed";
       if (authTransaction.messages) {
         console.log("Registration error message: " + authTransaction.messages[0].message);
+        errorMsg = authTransaction.messages[0].message;
       }
       authClient.transactionManager.clear();
-      response.render('registeruser.html', {"greeting": "Registration Failed"});
+      response.render('registeruser.html', {"greeting": errorMsg});
   }
 });
 
