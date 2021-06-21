@@ -75,6 +75,8 @@ app.post("/register", async (request, response) => {
       console.log(Object.keys(authTransaction));
       if (authTransaction.nextStep) {
         console.log("Next Step name:" + authTransaction.nextStep.name);
+        console.log(Object.keys(authTransaction.nextStep.inputs[0]));
+        console.log(authTransaction.nextStep.inputs[0].name);
         response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your password"});
       }
   } else {
