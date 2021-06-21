@@ -72,15 +72,21 @@ app.post("/register", async (request, response) => {
       authClient.tokenManager.setTokens(authTransaction.tokens);
       const name = authTransaction.tokens.idToken.claims.name;
       response.render('home.html', {"name": name});
+  } else if (authTransaction.status === IdxStatus.PENDING) {
+      console.log("Auth Transaction Status Pending Register User");
+      if (authTransaction.nextStep) {
+        console.log("Next Step name:" + authTransaction.nextStep.name);
+        if (authTransaction.nextStep.name === 'challenge-authenticator' || authTransaction.nextStep.name === 'authenticator-verification-data') {
+          response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Enter the OTP you received to reset your password!"});
+        } else {
+          authClient.transactionManager.clear();
+          response.render('registeruser.html', {"greeting": "Registration Failed"});
+        }
+      }
   } else {
       console.log("In IdxStatus non success for register user: ");
-      var errorMsg = "Registration Failed";
-      if (authTransaction.messages) {
-        console.log("Registration error message: " + authTransaction.messages[0].message);
-        errorMsg = authTransaction.messages[0].message;
-      }
       authClient.transactionManager.clear();
-      response.render('registeruser.html', {"greeting": errorMsg});
+      response.render('registeruser.html', {"greeting": "Registration Failed"});
   }
 });
 
