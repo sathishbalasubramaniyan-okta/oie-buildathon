@@ -55,14 +55,12 @@ app.post("/register", async (request, response) => {
   var firstname = request.body.firstname;
   var lastname = request.body.lastname;
   var email = request.body.email;
-  var newpassword = request.body.newpassword;
-  console.log("Password: " + newpassword);
+
   
   var authTransactionNew = await authClient.idx.register({ 
     firstName: firstname,
     lastName: lastname,
-    email: email,
-    password: newpassword
+    email: email
   });
   
   
