@@ -55,6 +55,8 @@ app.post("/register", async (request, response) => {
   var firstname = request.body.firstname;
   var lastname = request.body.lastname;
   var email = request.body.email;
+  var newpassword = request.body.newpassword;
+  console.log("Password: " + newpassword);
   
   var authTransaction = await authClient.idx.register({ 
     firstName: firstname,
@@ -63,21 +65,22 @@ app.post("/register", async (request, response) => {
     authenticators: ['password']
   });
   
+  var authTransactionNew = await authClient.idx.register({ password: newpassword });
   
-  if (authTransaction.status === IdxStatus.SUCCESS) {
+  
+  if (authTransactionNew.status === IdxStatus.SUCCESS) {
       console.log("In IdxStatus Success for register user: ");
       // handle tokens with authTransaction.tokens
-      authClient.tokenManager.setTokens(authTransaction.tokens);
-      const name = authTransaction.tokens.idToken.claims.name;
+      authClient.tokenManager.setTokens(authTransactionNew.tokens);
+      const name = authTransactionNew.tokens.idToken.claims.name;
       response.render('home.html', {"name": name});
-  } else if (authTransaction.status === IdxStatus.PENDING) {
+  } else if (authTransactionNew.status === IdxStatus.PENDING) {
       console.log("Auth Transaction Status Pending Register User");
-      console.log(Object.keys(authTransaction));
-      if (authTransaction.nextStep) {
-        console.log("Next Step name:" + authTransaction.nextStep.name);
-        console.log(Object.keys(authTransaction.nextStep.inputs[0]));
-        console.log(authTransaction.nextStep.inputs[0].name);
-        response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your password"});
+      console.log(Object.keys(authTransactionNew));
+      if (authTransactionNew.nextStep) {
+        console.log("Next Step name:" + authTransactionNew.nextStep.name);
+        console.log(Object.keys(authTransactionNew.nextStep.inputs[0]));
+        console.log(authTransactionNew.nextStep.inputs[0].name);
       }
   } else {
       console.log("In IdxStatus non success for register user: ");
