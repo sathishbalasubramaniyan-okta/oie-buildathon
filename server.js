@@ -163,9 +163,17 @@ app.post("/verifyotpregister", async (request, response) => {
     authClient.tokenManager.setTokens(authTransaction.tokens);
     const name = authTransaction.tokens.idToken.claims.name;
     response.render('home.html', {"name": name});
-  } else {
+  } else if (authTransaction.status === IdxStatus.PENDING) {
+    console.log("Auth Transaction Status Pending Register User");
+      if (authTransaction.nextStep) {
+        console.log(Object.keys(authTransaction.nextStep));
+        console.log("Next Step name:" + authTransaction.nextStep.name);
+      }
+  }
+  else {
+    console.log("User registration status" + authTransaction.status);
     console.log("Incorrect OTP: " + otp);
-    response.render('otp.html', {"otp_text": "Incorrect OTP!"});
+    response.render('verifyotpregister.html', {"otp_register_text": "Incorrect OTP!"});
   }
 });
 
