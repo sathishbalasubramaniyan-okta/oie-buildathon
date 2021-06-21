@@ -74,10 +74,12 @@ app.post("/register", async (request, response) => {
       response.render('home.html', {"name": name});
   } else if (authTransaction.status === IdxStatus.PENDING) {
       console.log("Auth Transaction Status Pending Register User");
+      console.log(Object.keys(authTransaction));
       if (authTransaction.nextStep) {
         console.log("Next Step name:" + authTransaction.nextStep.name);
         if (authTransaction.nextStep.name === 'select-authenticator-enroll') {
-          var authTransactionEmail = await authClient.idx.register({ authenticator: 'email' });
+          var authTransactionPwd = await authClient.idx.register({ authenticator: 'password' });
+          console.log(authTransactionPwd.status);
           response.render('verifyotpregister.html', {"otp_register_text": "Enter the OTP you received to verify your email"});
         } else {
           authClient.transactionManager.clear();
