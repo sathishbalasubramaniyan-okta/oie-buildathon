@@ -51,6 +51,15 @@ app.get("/username", (request, response) => {
   response.sendFile(__dirname + "/views/username.html");
 });
 
+app.post("/register", async (request, response) => {
+  var username = request.body.firstname;
+  var username = request.body.lastname;
+  var username = request.body.email;
+  var username = request.body.registerpassword;
+
+  response.sendFile(__dirname + "/views/username.html");
+});
+
 
 app.post("/home", async (request, response) => {
   var username = request.body.username;
