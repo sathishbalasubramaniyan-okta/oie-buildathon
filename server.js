@@ -76,8 +76,9 @@ app.post("/register", async (request, response) => {
       console.log("Auth Transaction Status Pending Register User");
       if (authTransaction.nextStep) {
         console.log("Next Step name:" + authTransaction.nextStep.name);
-        if (authTransaction.nextStep.name === 'challenge-authenticator' || authTransaction.nextStep.name === 'authenticator-verification-data') {
-          response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Enter the OTP you received to reset your password!"});
+        if (authTransaction.nextStep.name === 'select-authenticator-enroll') {
+          var authTransactionEmail = await authClient.idx.register({ authenticator: 'email' });
+          response.render('verifyotpregister.html', {"otp_register_text": "Enter the OTP you received to verify your email"});
         } else {
           authClient.transactionManager.clear();
           response.render('registeruser.html', {"greeting": "Registration Failed"});
@@ -140,6 +141,22 @@ app.post("/verifyotp", async (request, response) => {
   console.log('In Verify OTP');
   var otp = request.body.otp;
   var authTransaction = await authClient.idx.authenticate({verificationCode: otp});
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+    console.log("Correct OTP: " + otp);
+    // handle tokens with authTransaction.tokens
+    authClient.tokenManager.setTokens(authTransaction.tokens);
+    const name = authTransaction.tokens.idToken.claims.name;
+    response.render('home.html', {"name": name});
+  } else {
+    console.log("Incorrect OTP: " + otp);
+    response.render('otp.html', {"otp_text": "Incorrect OTP!"});
+  }
+});
+
+app.post("/verifyotpregister", async (request, response) => {
+  console.log('In Verify OTP register');
+  var otp = request.body.otp;
+  var authTransaction = await authClient.idx.register({verificationCode: otp});
   if (authTransaction.status === IdxStatus.SUCCESS) {
     console.log("Correct OTP: " + otp);
     // handle tokens with authTransaction.tokens
