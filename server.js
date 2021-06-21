@@ -79,8 +79,11 @@ app.post("/register", async (request, response) => {
       console.log(Object.keys(authTransactionNew));
       if (authTransactionNew.nextStep) {
         console.log("Next Step name:" + authTransactionNew.nextStep.name);
+        console.log(Object.keys(authTransactionNew.nextStep));
+        console.log(authTransactionNew.nextStep.inputs.length);
         console.log(Object.keys(authTransactionNew.nextStep.inputs[0]));
         console.log(authTransactionNew.nextStep.inputs[0].name);
+        console.log(authTransactionNew.nextStep.inputs[0].type);
       }
   } else {
       console.log("In IdxStatus non success for register user: ");
