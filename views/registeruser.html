@@ -17,7 +17,7 @@
 
   </head>
   <body>
-      <form class="form-class" action="/register" method="post">
+      <form class="form-class-register" action="/register" method="post">
         <div id="signinlabel">{{ greeting }}</div>
         <div class="form-group">
           <label for="firstname">First Name</label>
@@ -32,12 +32,12 @@
           <input type="text" id="email" name="email">
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password">
+          <label for="registerpassword">Password</label>
+          <input type="password" id="registerpassword" name="registerpassword">
         </div>
         <div class="form-group">
-          <label for="confirmpassword">Confirm Password</label>
-          <input type="password" id="confirmpassword" name="confirmpassword">
+          <label for="confirmregisterpassword">Confirm Password</label>
+          <input type="password" id="confirmregisterpassword" name="confirmregisterpassword">
         </div>
         <input id="submit" type="submit" value="Submit">
         <a id="existinguser" href="existinguser">Existing user? Sign In</a>

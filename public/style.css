@@ -35,6 +35,15 @@ h1 {
   margin: 10% auto
 }
 
+.form-class-register {
+  background-color: #eee;
+  display: grid;
+  grid-gap: 1em;
+  padding: 30px;
+  max-width: 60ch;
+  margin: 10% auto
+}
+
 input {
   border: 1px solid silver;
   display: inline-block;
@@ -42,6 +51,56 @@ input {
   margin-bottom: 10px;
   padding: 5px;
   width: 60%
+}
+
+.form-class-register #firstname {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-left: 15%;
+  padding: 5px;
+  width: 50%
+}
+
+.form-class-register #lastname {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-left: 15%;
+  padding: 5px;
+  width: 50%
+}
+
+.form-class-register #email {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-left: 15%;
+  padding: 5px;
+  width: 50%
+}
+
+.form-class-register #registerpassword {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-left: 15%;
+  padding: 5px;
+  width: 50%
+}
+
+.form-class-register #confirmregisterpassword {
+  border: 1px solid silver;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-left: 15%;
+  padding: 5px;
+  width: 50%
 }
 
 #newpassword {
