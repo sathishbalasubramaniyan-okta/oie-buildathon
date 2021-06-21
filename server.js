@@ -58,14 +58,13 @@ app.post("/register", async (request, response) => {
   var newpassword = request.body.newpassword;
   console.log("Password: " + newpassword);
   
-  var authTransaction = await authClient.idx.register({ 
+  var authTransactionNew = await authClient.idx.register({ 
     firstName: firstname,
     lastName: lastname,
     email: email,
-    authenticators: ['password']
+    password: newpassword
   });
   
-  var authTransactionNew = await authClient.idx.register({ password: newpassword });
   
   
   if (authTransactionNew.status === IdxStatus.SUCCESS) {
@@ -88,6 +87,9 @@ app.post("/register", async (request, response) => {
         console.log(Object.keys(authTransactionNew.nextStep.options[0]));
         console.log(authTransactionNew.nextStep.options[0].label);
         console.log(authTransactionNew.nextStep.options[0].value);
+        var authTransactionEmail = await authClient.idx.register({ authenticator: 'email' });
+        await authClient.idx.register({ authenticators: ['email'] });
+        response.render('verifyotpregister.html', {"otp_register_text": "Enter your OTP for Email verification"});
       }
   } else {
       console.log("In IdxStatus non success for register user: ");
