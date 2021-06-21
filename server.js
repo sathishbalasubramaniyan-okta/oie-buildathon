@@ -52,12 +52,34 @@ app.get("/username", (request, response) => {
 });
 
 app.post("/register", async (request, response) => {
-  var username = request.body.firstname;
-  var username = request.body.lastname;
-  var username = request.body.email;
-  var username = request.body.registerpassword;
-
-  response.sendFile(__dirname + "/views/username.html");
+  var firstname = request.body.firstname;
+  var lastname = request.body.lastname;
+  var email = request.body.email;
+  var password = request.body.registerpassword;
+  
+  var authTransaction = await authClient.idx.register({ 
+    firstName: firstname,
+    lastName: lastname,
+    email: email,
+    authenticators: ['password']
+  });
+  
+  authTransaction = await authClient.idx.register({ password: password });
+  
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+      console.log("In IdxStatus Success for register user: ");
+      // handle tokens with authTransaction.tokens
+      authClient.tokenManager.setTokens(authTransaction.tokens);
+      const name = authTransaction.tokens.idToken.claims.name;
+      response.render('home.html', {"name": name});
+  } else {
+      console.log("In IdxStatus non success for register user: ");
+      if (authTransaction.messages) {
+        console.log("Registration error message: " + authTransaction.messages[0].message);
+      }
+      authClient.transactionManager.clear();
+      response.render('registeruser.html', {"greeting": "Registration Failed"});
+  }
 });
 
 
