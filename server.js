@@ -39,6 +39,14 @@ app.get("/", (request, response) => {
   response.render('index.html', {"greeting": "Sign into the OIE experience!"});
 });
 
+app.get("/existinguser", (request, response) => {
+  response.render('index.html', {"greeting": "Sign into the OIE experience!"});
+});
+
+app.get("/newuser", (request, response) => {
+  response.render('registeruser.html', {"greeting": "Register for the OIE experience!"});
+});
+
 app.get("/username", (request, response) => {
   response.sendFile(__dirname + "/views/username.html");
 });
