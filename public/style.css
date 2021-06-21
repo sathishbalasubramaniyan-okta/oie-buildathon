@@ -126,3 +126,7 @@ label {
 #resetpassword, #existinguser, #newuser {
   margin: 0 auto
 }
+
+#back {
+  float: left
+}
