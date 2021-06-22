@@ -151,7 +151,6 @@ app.post("/otppasswordless", async (request, response) => {
     console.log("In IdxStatus Pending otppasswordless:  ");
     if (authTransaction.nextStep) {
       console.log("Next Step name:" + authTransaction.nextStep.name);
-      console.log("Can Skip:" + authTransaction.nextStep.canSkip);
       response.render('verifyotppasswordless.html', {"verify_otp_passwordless_text": "Enter the OTP you received to authenticate!"});
     } 
   } else {
@@ -231,20 +230,22 @@ app.post("/verifyotppasswordless", async (request, response) => {
   console.log('In Verify OTP passwordless');
   var otp = request.body.otp;
   var authTransaction = await authClient.idx.authenticate({verificationCode: otp});
-  if (authTransaction.status === IdxStatus.PENDING) {
-    console.log("Auth Transaction Status Pending after verifying OTP for password reset");
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+    console.log("Correct OTP: " + otp);
     // handle tokens with authTransaction.tokens
-    if (authTransaction.nextStep) {
+    authClient.tokenManager.setTokens(authTransaction.tokens);
+    const name = authTransaction.tokens.idToken.claims.name;
+    response.render('home.html', {"name": name});
+  } else if (authTransaction.status === IdxStatus.PENDING) {
+      console.log("Auth Transaction Status Pending Verify OTP passwordless");
+      if (authTransaction.nextStep) {
         console.log("Next Step name:" + authTransaction.nextStep.name);
-        if (authTransaction.nextStep.name === 'reset-authenticator') {
-          response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
-        } else {
-          response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Invalid OTP!"});
-        }
+        response.render('verifyotppasswordless.html', {"verify_otp_passwordless_text": "Invalid OTP!"});
       }
-  } else {
-    console.log("Incorrect OTP: " + otp);
-    response.render('verifyotppasswordreset.html', {"otp_passwordreset_text": "Invalid OTP!"});
+  }
+  else {
+    console.log("User registration status verify otp passwordless" + authTransaction.status);
+    response.render('verifyotppasswordless.html', {"verify_otp_passwordless_text": "Error Occurred!"});
   }
 });
 
