@@ -151,6 +151,14 @@ app.post("/otppasswordless", async (request, response) => {
     console.log("In IdxStatus Pending otppasswordless:  ");
     if (authTransaction.nextStep) {
       console.log("Next Step name:" + authTransaction.nextStep.name);
+      console.log(Object.keys(authTransaction));
+      console.log(Object.keys(authTransaction.nextStep));
+      console.log(authTransaction.nextStep.inputs.length);
+      console.log(Object.keys(authTransaction.nextStep.inputs[0]));
+      console.log(authTransaction.nextStep.inputs[0].name);
+      console.log(authTransaction.nextStep.inputs[0].label);
+      console.log(authTransaction.nextStep.inputs[1].name);
+      console.log(authTransaction.nextStep.inputs[1].label);
       response.render('verifyotppasswordless.html', {"verify_otp_passwordless_text": "Enter the OTP you received to authenticate!"});
     } 
   } else {
