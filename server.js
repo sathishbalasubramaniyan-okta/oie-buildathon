@@ -51,9 +51,6 @@ app.get("/username", (request, response) => {
   response.sendFile(__dirname + "/views/username.html");
 });
 
-app.get("/passwordless", (request, response) => {
-  response.sendFile(__dirname + "/views/passwordlesslogin.html");
-});
 
 app.post("/register", async (request, response) => {
   var firstname = request.body.firstname;
@@ -134,40 +131,6 @@ app.post("/home", async (request, response) => {
 });
 
 
-app.post("/otppasswordless", async (request, response) => {
-  var username = request.body.username;
-  console.log("Username: " + username);
-  var authTransaction = await authClient.idx.authenticate({ username: username, authenticators: ['email'] });
-  if (authTransaction.status === IdxStatus.SUCCESS) {
-    // handle tokens with authTransaction.tokens
-    authClient.tokenManager.setTokens(authTransaction.tokens);
-    const name = authTransaction.tokens.idToken.claims.name;
-    response.render('home.html', {"name": name});
-  } else if (authTransaction.status === IdxStatus.FAILURE) {
-    console.log("In IdxStatus Failure: ");
-    authClient.transactionManager.clear();
-    response.render('index.html', {"greeting": "Invalid Credentials!"});
-  } else if (authTransaction.status === IdxStatus.PENDING) {
-    console.log("In IdxStatus Pending otppasswordless:  ");
-    if (authTransaction.nextStep) {
-      console.log("Next Step name:" + authTransaction.nextStep.name);
-      console.log(Object.keys(authTransaction));
-      console.log(Object.keys(authTransaction.nextStep));
-      console.log(authTransaction.nextStep.inputs.length);
-      console.log(Object.keys(authTransaction.nextStep.inputs[0]));
-      console.log(authTransaction.nextStep.inputs[0].name);
-      console.log(authTransaction.nextStep.inputs[0].label);
-      console.log(authTransaction.nextStep.inputs[1].name);
-      console.log(authTransaction.nextStep.inputs[1].label);
-      response.render('verifyotppasswordless.html', {"verify_otp_passwordless_text": "Enter the OTP you received to authenticate!"});
-    } 
-  } else {
-    console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
-    response.sendFile(__dirname + "/views/passwordlesslogin.html");
-  }
-});
-
-
 app.post("/verifyotp", async (request, response) => {
   console.log('In Verify OTP');
   var otp = request.body.otp;
@@ -234,28 +197,6 @@ app.post("/verifyotppasswordreset", async (request, response) => {
   }
 });
 
-app.post("/verifyotppasswordless", async (request, response) => {
-  console.log('In Verify OTP passwordless');
-  var otp = request.body.otp;
-  var authTransaction = await authClient.idx.authenticate({verificationCode: otp});
-  if (authTransaction.status === IdxStatus.SUCCESS) {
-    console.log("Correct OTP: " + otp);
-    // handle tokens with authTransaction.tokens
-    authClient.tokenManager.setTokens(authTransaction.tokens);
-    const name = authTransaction.tokens.idToken.claims.name;
-    response.render('home.html', {"name": name});
-  } else if (authTransaction.status === IdxStatus.PENDING) {
-      console.log("Auth Transaction Status Pending Verify OTP passwordless");
-      if (authTransaction.nextStep) {
-        console.log("Next Step name:" + authTransaction.nextStep.name);
-        response.render('verifyotppasswordless.html', {"verify_otp_passwordless_text": "Invalid OTP!"});
-      }
-  }
-  else {
-    console.log("User registration status verify otp passwordless" + authTransaction.status);
-    response.render('verifyotppasswordless.html', {"verify_otp_passwordless_text": "Error Occurred!"});
-  }
-});
 
 app.post("/submitnewpassword", async (request, response) => {
   console.log('In submit new password');
