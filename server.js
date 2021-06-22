@@ -64,7 +64,6 @@ app.post("/register", async (request, response) => {
   });
   
   
-  
   if (authTransactionNew.status === IdxStatus.SUCCESS) {
       console.log("In IdxStatus Success for register user: ");
       // handle tokens with authTransaction.tokens
@@ -73,18 +72,8 @@ app.post("/register", async (request, response) => {
       response.render('home.html', {"name": name});
   } else if (authTransactionNew.status === IdxStatus.PENDING) {
       console.log("Auth Transaction Status Pending Register User");
-      console.log(Object.keys(authTransactionNew));
       if (authTransactionNew.nextStep) {
         console.log("Next Step name:" + authTransactionNew.nextStep.name);
-        console.log(Object.keys(authTransactionNew.nextStep));
-        console.log(authTransactionNew.nextStep.inputs.length);
-        console.log(Object.keys(authTransactionNew.nextStep.inputs[0]));
-        console.log(authTransactionNew.nextStep.inputs[0].name);
-        console.log(authTransactionNew.nextStep.inputs[0].type);
-        console.log(authTransactionNew.nextStep.options.length);
-        console.log(Object.keys(authTransactionNew.nextStep.options[0]));
-        console.log(authTransactionNew.nextStep.options[0].label);
-        console.log(authTransactionNew.nextStep.options[0].value);
         var authTransactionEmail = await authClient.idx.register({ authenticators: ['email'] });
         response.render('verifyotpregister.html', {"otp_register_text": "Enter your OTP for Email verification"});
       }
