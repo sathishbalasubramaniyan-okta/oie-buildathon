@@ -111,19 +111,19 @@ app.post("/submitnewpassworduserreg", async (request, response) => {
   } else if (authTransaction.status === IdxStatus.PENDING) {
       console.log("Auth Transaction Status Pending submitnewpassworduserreg");
       console.log(Object.keys(authTransaction));
-     console.log("Auth Transaction Status Pending Register User");
-      console.log(Object.keys(authTransactionNew));
-      if (authTransactionNew.nextStep) {
-        console.log("Next Step name:" + authTransactionNew.nextStep.name);
-        console.log(Object.keys(authTransactionNew.nextStep));
-        console.log(authTransactionNew.nextStep.inputs.length);
-        console.log(Object.keys(authTransactionNew.nextStep.inputs[0]));
-        console.log(authTransactionNew.nextStep.inputs[0].name);
-        console.log(authTransactionNew.nextStep.inputs[0].type);
-        console.log(authTransactionNew.nextStep.options.length);
-        console.log(Object.keys(authTransactionNew.nextStep.options[0]));
-        console.log(authTransactionNew.nextStep.options[0].label);
-        console.log(authTransactionNew.nextStep.options[0].value);
+      console.log(Object.keys(authTransaction));
+      if (authTransaction.nextStep) {
+        console.log("Next Step name:" + authTransaction.nextStep.name);
+        console.log(Object.keys(authTransaction.nextStep));
+        console.log(authTransaction.nextStep.inputs.length);
+        console.log(Object.keys(authTransaction.nextStep.inputs[0]));
+        console.log(authTransaction.nextStep.inputs[0].name);
+        console.log(authTransaction.nextStep.inputs[0].type);
+        console.log(authTransaction.nextStep.options.length);
+        console.log(Object.keys(authTransaction.nextStep.options[0]));
+        console.log(authTransaction.nextStep.options[0].label);
+        console.log(authTransaction.nextStep.options[0].value);
+      }
   } else {
       console.log("In IdxStatus non success for register user: ");
       authClient.transactionManager.clear();
