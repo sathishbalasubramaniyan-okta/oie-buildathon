@@ -244,9 +244,8 @@ app.post("/submitnewpassworduserreg", async (request, response) => {
         response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your new password"});
       } 
   } else {
-      console.log("In IdxStatus non success for register user: ");
-      authClient.transactionManager.clear();
-      response.render('registeruser.html', {"greeting": "Registration Failed"});
+      console.log("In IdxStatus non success or pending for register user: ");
+      response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your new password"});
   }
 });
 
