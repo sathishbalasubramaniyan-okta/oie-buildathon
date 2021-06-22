@@ -84,42 +84,6 @@ app.post("/register", async (request, response) => {
   }
 });
 
-app.post("/submitnewpassworduserreg", async (request, response) => {
-  var newpassword = request.body.newpassword;
-  console.log("Password in submitnewpassworduserreg: " + newpassword);
-  
-  var authTransaction = await authClient.idx.register({ password: newpassword });
-  
-  
-  if (authTransaction.status === IdxStatus.SUCCESS) {
-      console.log("In IdxStatus Success for register user: ");
-      // handle tokens with authTransaction.tokens
-      authClient.tokenManager.setTokens(authTransaction.tokens);
-      const name = authTransaction.tokens.idToken.claims.name;
-      response.render('home.html', {"name": name});
-  } else if (authTransaction.status === IdxStatus.PENDING) {
-      console.log("Auth Transaction Status Pending submitnewpassworduserreg");
-      console.log(Object.keys(authTransaction));
-      console.log(Object.keys(authTransaction));
-      if (authTransaction.nextStep) {
-        console.log("Next Step name:" + authTransaction.nextStep.name);
-        console.log(Object.keys(authTransaction.nextStep));
-        console.log(authTransaction.nextStep.inputs.length);
-        console.log(Object.keys(authTransaction.nextStep.inputs[0]));
-        console.log(authTransaction.nextStep.inputs[0].name);
-        console.log(authTransaction.nextStep.inputs[0].type);
-        console.log(authTransaction.nextStep.options.length);
-        console.log(Object.keys(authTransaction.nextStep.options[0]));
-        console.log(authTransaction.nextStep.options[0].label);
-        console.log(authTransaction.nextStep.options[0].value);
-      }
-  } else {
-      console.log("In IdxStatus non success for register user: ");
-      authClient.transactionManager.clear();
-      response.render('registeruser.html', {"greeting": "Registration Failed"});
-  }
-});
-
 
 app.post("/home", async (request, response) => {
   var username = request.body.username;
@@ -193,27 +157,20 @@ app.post("/verifyotpregister", async (request, response) => {
     const name = authTransaction.tokens.idToken.claims.name;
     response.render('home.html', {"name": name});
   } else if (authTransaction.status === IdxStatus.PENDING) {
-    console.log("Auth Transaction Status Pending Register User verify OTP");
-      console.log(Object.keys(authTransaction));
+      console.log("Auth Transaction Status Pending Register User verify OTP");
       if (authTransaction.nextStep) {
         console.log("Next Step name:" + authTransaction.nextStep.name);
-        console.log(Object.keys(authTransaction.nextStep));
-        console.log(authTransaction.nextStep.inputs.length);
-        console.log(Object.keys(authTransaction.nextStep.inputs[0]));
-        console.log(authTransaction.nextStep.inputs[0].name);
-        console.log(authTransaction.nextStep.inputs[0].type);
-        console.log(authTransaction.nextStep.options.length);
-        console.log(Object.keys(authTransaction.nextStep.options[0]));
-        console.log(authTransaction.nextStep.options[0].label);
-        console.log(authTransaction.nextStep.options[0].value);
-        var authTransaction = await authClient.idx.register({ authenticators: ['password'] });
-        response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your password"});
+        if (authTransaction.nextStep.name === 'select-authenticator-enroll') {
+          authTransaction = await authClient.idx.register({ authenticators: ['password'] });
+          response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your password"});
+        } else {
+          response.render('verifyotpregister.html', {"otp_register_text": "Invalid OTP!"});
+        }
       }
   }
   else {
-    console.log("User registration status" + authTransaction.status);
-    console.log("Incorrect OTP: " + otp);
-    response.render('verifyotpregister.html', {"otp_register_text": "Incorrect OTP!"});
+    console.log("User registration status verify otp register" + authTransaction.status);
+    response.render('verifyotpregister.html', {"otp_register_text": "Error Occurred"});
   }
 });
 
@@ -263,6 +220,33 @@ app.post("/submitnewpassword", async (request, response) => {
   } else {
     console.log("In IdxStatus not SUCCESS, FAILURE, PENDING for recover password: ");
     response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
+  }
+});
+
+app.post("/submitnewpassworduserreg", async (request, response) => {
+  var newpassword = request.body.newpassword;
+  console.log("Password in submitnewpassworduserreg: " + newpassword);
+  
+  var authTransaction = await authClient.idx.register({ password: newpassword });
+  
+  
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+      console.log("In IdxStatus Success for register user: ");
+      // handle tokens with authTransaction.tokens
+      authClient.tokenManager.setTokens(authTransaction.tokens);
+      const name = authTransaction.tokens.idToken.claims.name;
+      response.render('home.html', {"name": name});
+  } else if (authTransaction.status === IdxStatus.PENDING) {
+      console.log("Auth Transaction Status Pending submitnewpassworduserreg");
+      if (authTransaction.messages) {
+        response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": authTransaction.messages[0].message});
+      } else {
+        response.render('collectnewpassworduserreg.html', {"new_password_user_reg_text": "Enter your new password"});
+      } 
+  } else {
+      console.log("In IdxStatus non success for register user: ");
+      authClient.transactionManager.clear();
+      response.render('registeruser.html', {"greeting": "Registration Failed"});
   }
 });
 
