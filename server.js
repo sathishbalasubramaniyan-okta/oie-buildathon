@@ -51,6 +51,10 @@ app.get("/username", (request, response) => {
   response.sendFile(__dirname + "/views/username.html");
 });
 
+app.get("/passwordless", (request, response) => {
+  response.sendFile(__dirname + "/views/passwordlesslogin.html");
+});
+
 app.post("/register", async (request, response) => {
   var firstname = request.body.firstname;
   var lastname = request.body.lastname;
@@ -86,6 +90,51 @@ app.post("/register", async (request, response) => {
 
 
 app.post("/home", async (request, response) => {
+  var username = request.body.username;
+  var password = request.body.password;
+  const authenticationOptions = {
+    username,
+    password
+  };
+  console.log("Username: " + username);
+  console.log("Password: " + password);
+  var authTransaction = await authClient.idx.authenticate(authenticationOptions);
+  if (authTransaction.status === IdxStatus.SUCCESS) {
+    // handle tokens with authTransaction.tokens
+    authClient.tokenManager.setTokens(authTransaction.tokens);
+    const name = authTransaction.tokens.idToken.claims.name;
+    response.render('home.html', {"name": name});
+  } else if (authTransaction.status === IdxStatus.FAILURE) {
+    console.log("In IdxStatus Failure: ");
+    authClient.transactionManager.clear();
+    response.render('index.html', {"greeting": "Invalid Credentials!"});
+  } else if (authTransaction.status === IdxStatus.PENDING) {
+    console.log("In IdxStatus Pending: ");
+    if (authTransaction.nextStep) {
+      console.log("Next Step name:" + authTransaction.nextStep.name);
+      console.log("Can Skip:" + authTransaction.nextStep.canSkip);
+      if (authTransaction.nextStep.name === 'select-authenticator-authenticate') {
+        console.log('In select-authenticator-authenticate');
+        for (var i=0; i<authTransaction.nextStep.options.length; i++) {
+          console.log("Options label: " + authTransaction.nextStep.options[i].label);
+          console.log("Options value: " + authTransaction.nextStep.options[i].value);
+        }
+        var authTransactionEmail = await authClient.idx.authenticate({ authenticator: 'email' });
+        response.render('otp.html', {"otp_text": "Enter the OTP you received to authenticate!"});
+      } else {
+        authClient.transactionManager.clear();
+        response.render('index.html', {"greeting": "Invalid Credentials!"});
+      }
+    } 
+  } else {
+    console.log("In IdxStatus not SUCCESS, FAILURE, PENDING: ");
+    authClient.transactionManager.clear();
+    response.render('index.html', {"greeting": "Invalid Credentials!"});
+  }
+});
+
+
+app.post("/otppasswordless", async (request, response) => {
   var username = request.body.username;
   var password = request.body.password;
   const authenticationOptions = {
