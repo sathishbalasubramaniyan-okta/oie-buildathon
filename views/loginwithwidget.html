@@ -50,22 +50,27 @@
           });
           
           signIn.authClient.token.getUserInfo().then(function(user) {
+            alert("tokens exist");
             document.getElementById("greetingwidget").style.display = 'block';
             document.getElementById("greetingwidget").innerHTML = 'Welcome ' + user.given_name + '!, you have logged in';
             document.getElementById("logoutwidget").style.display = 'block';
             }, function(error) {
+            alert("tokens don't exist, rendering widget");
             signIn.showSignInToGetTokens({
               el: '#okta-login-container'
             }).then(function(tokens) {
+              alert("Got tokens");
               signIn.authClient.tokenManager.setTokens(tokens);
               window.location.assign(window.location.protocol + '//' + window.location.hostname);
             }).catch(function(err) {
               console.error(err);
+              alert("Error occurred");
             });
           });
           
           function logout()
           {
+            alert("in logout");
               signIn.authClient.signOut();
           }
       </script>
