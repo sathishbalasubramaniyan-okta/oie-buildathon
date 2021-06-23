@@ -8,17 +8,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A cool thing made with Glitch">
-​
+
     <title>Test Okta Signin Widget</title>
-​
+
     <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
     
     <script src="https://global.oktacdn.com/okta-signin-widget/5.7.3/js/okta-sign-in.min.js" type="text/javascript"></script>
-​
+
     <link href="https://global.oktacdn.com/okta-signin-widget/5.7.3/css/okta-sign-in.min.css" type="text/css" rel="stylesheet"/>
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css">
-​
+
   </head>
   <body>
     <div id="greetingwidget"></div>
@@ -36,8 +36,6 @@
             authParams : {                  
               issuer: 'https://oie-9004654.oktapreview.com/oauth2/default',
               pkce: true,
-              //responseType: ['id_token', 'token'],
-              // `display: page` will initiate the OAuth2 page redirect flow
               scopes : [  'openid','email','profile','address','phone']
             },              
             features : {
@@ -53,45 +51,17 @@
           
           signIn.authClient.token.getUserInfo().then(function(user) {
             document.getElementById("greetingwidget").style.display = 'block';
-            document.getElementById("greetingwidget").innerHTML = 'Welcome ' + user.given_name + '!';
+            document.getElementById("greetingwidget").innerHTML = 'Welcome ' + user.given_name + '!, you have logged in';
             document.getElementById("logoutwidget").style.display = 'block';
             }, function(error) {
             signIn.showSignInToGetTokens({
               el: '#okta-login-container'
             }).then(function(tokens) {
               signIn.authClient.tokenManager.setTokens(tokens);
-              oktaSignIn.remove();
-
-              const idToken = tokens.idToken;
-              document.getElementById("messageBox").innerHTML = "Hello, " + idToken.claims.email + "! You just logged in! :)";
-              document.getElementById("logout").style.display = 'block';
-
+              window.location.assign(window.location.protocol + '//' + window.location.hostname);
             }).catch(function(err) {
               console.error(err);
             });
-          });
-​
-          signIn.authClient.session.exists()
-          .then(function(exists) {
-            if (exists) {
-              signIn.authClient.token.getUserInfo()
-              .then(function(user) {
-                document.getElementById("greeting").style.display = 'block';
-                document.getElementById("greeting").innerHTML = 'Welcome ' + user.given_name + '!';
-                document.getElementById("logout").style.display = 'block';
-              })
-              .catch(function(err) {
-                // handle OAuthError or AuthSdkError (AuthSdkError will be thrown if app is in OAuthCallback state)
-              });
-            } else {
-              signIn.showSignInToGetTokens().then(function(tokens) {
-                signIn.authClient.tokenManager.setTokens(tokens);
-                window.location.assign(window.location.protocol + '//' + window.location.hostname);
-              }).catch(function(error) {
-                // This function is invoked with errors the widget cannot recover from:
-                // Known errors: CONFIG_ERROR, UNSUPPORTED_BROWSER_ERROR
-              });
-            }
           });
           
           function logout()
