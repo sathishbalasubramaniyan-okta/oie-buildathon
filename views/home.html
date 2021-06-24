@@ -16,13 +16,17 @@
   </head>
   <body>
     <div id="greeting">Hello {{ name }}, you have logged in!</div> 
+    
+    <a id="logout" href="javascript:;" onclick="logout();">Logout</a>
+    <br>
     <label for="id_token">ID Token</label>
+    <br>
     <textarea id="id_token" name="id_token" rows="10" cols="100">{{ id_token }}</textarea>
-
+    <br><br>
     <label for="access_token">Access Token</label>
+    <br>
     <textarea id="access_token" name="access_token" rows="10" cols="100">{{ access_token }}</textarea>
       
-    <a id="logout" href="javascript:;" onclick="logout();">Logout</a>
 
     <script type="text/javascript">
           function logout()

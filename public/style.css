@@ -179,7 +179,8 @@ label {
 
 #logout {
   float: right;
-  margin-right: 5%
+  margin-right: 5%;
+  margin-top: -2%
 }
 
 #resetpassword, #existinguser, #newuser {

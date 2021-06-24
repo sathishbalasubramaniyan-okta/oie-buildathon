@@ -100,8 +100,9 @@ app.post("/home", async (request, response) => {
     // handle tokens with authTransaction.tokens
     authClient.tokenManager.setTokens(authTransaction.tokens);
     const name = authTransaction.tokens.idToken.claims.name;
-    var id_token = 
-    response.render('home.html', {"name": name});
+    var id_token = authTransaction.tokens.idToken.idToken;
+    var access_token = authTransaction.tokens.accessToken.accessToken;
+    response.render('home.html', {"name": name, "id_token": id_token, "access_token": access_token});
   } else if (authTransaction.status === IdxStatus.FAILURE) {
     console.log("In IdxStatus Failure: ");
     authClient.transactionManager.clear();
@@ -141,7 +142,9 @@ app.post("/verifyotp", async (request, response) => {
     // handle tokens with authTransaction.tokens
     authClient.tokenManager.setTokens(authTransaction.tokens);
     const name = authTransaction.tokens.idToken.claims.name;
-    response.render('home.html', {"name": name});
+    var id_token = authTransaction.tokens.idToken.idToken;
+    var access_token = authTransaction.tokens.accessToken.accessToken;
+    response.render('home.html', {"name": name, "id_token": id_token, "access_token": access_token});
   } else {
     console.log("Incorrect OTP: " + otp);
     response.render('otp.html', {"otp_text": "Incorrect OTP!"});
