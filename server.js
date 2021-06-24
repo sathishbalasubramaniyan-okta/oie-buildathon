@@ -70,7 +70,9 @@ app.post("/register", async (request, response) => {
       // handle tokens with authTransaction.tokens
       authClient.tokenManager.setTokens(authTransactionNew.tokens);
       const name = authTransactionNew.tokens.idToken.claims.name;
-      response.render('home.html', {"name": name});
+      var id_token = authTransactionNew.tokens.idToken.idToken;
+      var access_token = authTransactionNew.tokens.accessToken.accessToken;
+      response.render('home.html', {"name": name, "id_token": id_token, "access_token": access_token});
   } else if (authTransactionNew.status === IdxStatus.PENDING) {
       console.log("Auth Transaction Status Pending Register User");
       if (authTransactionNew.nextStep) {
@@ -160,7 +162,9 @@ app.post("/verifyotpregister", async (request, response) => {
     // handle tokens with authTransaction.tokens
     authClient.tokenManager.setTokens(authTransaction.tokens);
     const name = authTransaction.tokens.idToken.claims.name;
-    response.render('home.html', {"name": name});
+    var id_token = authTransaction.tokens.idToken.idToken;
+    var access_token = authTransaction.tokens.accessToken.accessToken;
+    response.render('home.html', {"name": name, "id_token": id_token, "access_token": access_token});
   } else if (authTransaction.status === IdxStatus.PENDING) {
       console.log("Auth Transaction Status Pending Register User verify OTP");
       if (authTransaction.nextStep) {
@@ -212,7 +216,9 @@ app.post("/submitnewpassword", async (request, response) => {
       // handle tokens with authTransaction.tokens
       authClient.tokenManager.setTokens(authTransaction.tokens);
       const name = authTransaction.tokens.idToken.claims.name;
-      response.render('home.html', {"name": name});
+      var id_token = authTransaction.tokens.idToken.idToken;
+      var access_token = authTransaction.tokens.accessToken.accessToken;
+      response.render('home.html', {"name": name, "id_token": id_token, "access_token": access_token});
   } else if (authTransaction.status === IdxStatus.FAILURE) {
       console.log("In IdxStatus Failure: ");
       response.render('collectnewpassword.html', {"new_password_text": "Enter your new password"});
@@ -241,7 +247,9 @@ app.post("/submitnewpassworduserreg", async (request, response) => {
       // handle tokens with authTransaction.tokens
       authClient.tokenManager.setTokens(authTransaction.tokens);
       const name = authTransaction.tokens.idToken.claims.name;
-      response.render('home.html', {"name": name});
+      var id_token = authTransaction.tokens.idToken.idToken;
+      var access_token = authTransaction.tokens.accessToken.accessToken;
+      response.render('home.html', {"name": name, "id_token": id_token, "access_token": access_token});
   } else if (authTransaction.status === IdxStatus.PENDING) {
       console.log("Auth Transaction Status Pending submitnewpassworduserreg");
       if (authTransaction.messages) {
