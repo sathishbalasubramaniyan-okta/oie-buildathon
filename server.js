@@ -100,6 +100,7 @@ app.post("/home", async (request, response) => {
     // handle tokens with authTransaction.tokens
     authClient.tokenManager.setTokens(authTransaction.tokens);
     const name = authTransaction.tokens.idToken.claims.name;
+    var id_token = 
     response.render('home.html', {"name": name});
   } else if (authTransaction.status === IdxStatus.FAILURE) {
     console.log("In IdxStatus Failure: ");
