@@ -1,0 +1,11 @@
+.gitignore.swp
+.bash_history
+.viminfo
+package-lock.json
+*.yaml
+.config
+.data
+.env
+.glitch*
+.node*
+

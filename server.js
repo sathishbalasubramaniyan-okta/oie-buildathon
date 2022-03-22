@@ -12,8 +12,8 @@ const { IdxStatus } = require('@okta/okta-auth-js');
 var config = {
   // Required config
   issuer: 'https://oie-9004654.oktapreview.com/oauth2/default',
-  clientId: '0oausgtcbUm0u8Z8b1d6',
-  clientSecret:'T6hW-amIlYH8v_rrzMLTn8B9RyFDv6PDgdyunFIv',
+  clientId: 'xxx',
+  clientSecret:'xxx',
   redirectUri: 'https://oie-buildathon.glitch.me/callback',
   appBaseUrl: 'https://oie-buildathon.glitch.me',
   scopes: ['openid', 'profile', 'email'],
