@@ -1,11 +1,11 @@
 .gitignore.swp
 .bash_history
 .viminfo
-package-lock.json
-*.yaml
+.package-lock.json
+shrinkwrap.yaml
 .config
 .data
 .env
-.glitch*
+.glitch-assets
 .node*
 
