@@ -2,6 +2,7 @@
 
 This demo uses the Okta Auth JS SDK (https://github.com/okta/okta-auth-js) in a node.js application to demonstrate use cases such as Login, Logout, Password reset using Email OTP and Multifactor authentication
 
+This was built for an internal buildathon focussed on showcasing the capabilities of the newly released Okta Identity Engine SDKs
 
 ## Made by [Glitch](https://glitch.com/)
 
